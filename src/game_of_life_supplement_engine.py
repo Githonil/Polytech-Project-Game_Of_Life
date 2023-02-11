@@ -77,7 +77,28 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     param : columns - Le nombre de colonnes de la grille.
     """
     #TODO: Voir l'implémentation des naissances.
-    game_of_life_engine.analyze(cellsAlive, rows, columns)
+    for cellCoord in cellsAlive:
+        
+        neighbors = []
+
+        for x in range(-1, 2, 1):
+            for y in range(-1, 2, 1):
+
+                if x == 0 and y == 0:
+                    continue
+
+                coordX = x + cellCoord[0]
+                coordY = y + cellCoord[1]
+
+                coordX = game_of_life_engine.adjustBorder(coordX, columns)
+                coordY = game_of_life_engine.adjustBorder(coordY, rows)
+
+                if not (coordX, coordY) in cellsAlive:
+                    cellsAlive[(coordX, coordY)] = Cell(False, cellsAlive[(cellCoord[0], cellCoord[1])].color)
+
+                neighbors.append(cellsAlive[((coordX, coordY))])
+
+        cellsAlive[cellCoord].analyze(neighbors)
 
 
 
