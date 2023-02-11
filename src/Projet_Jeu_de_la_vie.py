@@ -251,8 +251,8 @@ def render(canvas : 'tkinter.Canvas', cellAlives : dict, columns : int, rows : i
         coordY = cellCoord[1] * cellHeight
         canvas.create_rectangle(coordX, coordY, coordX + cellWidth - 1, coordY + cellHeight - 1, fill=cellAlives[cellCoord][0])
     
-    
 
+    
 def addCell(cellAlives : dict, x : int, y : int, color : str, lifeTime : int) -> None:
     """
     Cette fonction ajoute une cellule dans les cellules vivantes.
@@ -377,8 +377,6 @@ def ticksUpdate(ticksPerSecond : int, lastTickTime : float, cellAlives : dict, n
         
     analyze(cellAlives, newBorns, width, height)
     update(cellAlives, newBorns)
-    
-    print(cellAlives)
     
     return time.time()
     
