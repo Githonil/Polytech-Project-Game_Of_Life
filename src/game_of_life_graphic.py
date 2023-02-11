@@ -207,11 +207,13 @@ def clickCell(event : 'tkinter.Event', cellsAlive : dict, cellWidth : int, cellH
     param : cellHeight - La hauteur d'une cellule.
     param : colors - La liste des couleurs actives.
     """
-    coordX = (event.x - (event.x%cellWidth)) / cellWidth
-    coordY = (event.y - (event.y%cellHeight)) / cellHeight
+    coordX = (event.x - (event.x%cellWidth)) // cellWidth
+    coordY = (event.y - (event.y%cellHeight)) // cellHeight
 
     colors_size = len(colors)
     colors = sorted(colors).reverse()
+    if colors_size == 0:
+        colors = []
     
     if (coordX, coordY) in cellsAlive:
         cell = cellsAlive[(coordX, coordY)]
