@@ -82,7 +82,7 @@ class Game:
         if (time.time() - self.__lastTickTime <= ticksPerSecond):
             return
             
-        game_of_life_supplement_engine.analyze(self.__cellsAlive, self.__rows, self.__columns) #TODO: Adapter en conséquence FAIRE UN MERGE RAPIDEMENT
+        game_of_life_supplement_engine.analyze(self.__cellsAlive, self.__rows, self.__columns)
         game_of_life_supplement_engine.update(self.__cellsAlive)
         
         self.__lastTickTime = time.time()
