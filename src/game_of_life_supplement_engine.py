@@ -23,11 +23,11 @@ class Cell(game_of_life_engine.Cell):
     @property
     def color(self) -> None:
         """
-        Cette méthode est interdite !
+        Cette méthode renvoie la couleur de la cellule.
 
-        raise : PermissionError - Si vous tentez d'accéder l'attribut.
+        return : Renvoie la couleur de la cellule.
         """
-        raise PermissionError("You don't have the acces to change this attribute.")
+        return self.__color
     
 
 
