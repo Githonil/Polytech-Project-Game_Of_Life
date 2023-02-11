@@ -29,7 +29,51 @@ def initCanvas(root : 'tkinter.Tk', width : int, height : int) -> 'tkinter.Canva
     canvas.grid(row=0, column=0)
     
     return canvas
+
+
+
+def initRender(canvas : 'tkinter.Canvas', cellsAlive : dict, rows : int, columns : int) -> list:
+    """
+    Cette fonction initialise le rendu du canvas.
     
+    param : canvas - Le canvas de l'interface graphique.
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    param : rows - Le nombre de lignes.
+    param : columns - Le nombre de colonnes.
+    return : Les éléments de l'écran.
+    """
+    elements = []
+    canvasWidth = int(canvas.cget("width"))
+    canvasHeight = int(canvas.cget("height"))
+    
+    cellWidth = canvasWidth // columns
+    cellHeight = canvasHeight // rows
+    
+    canvas.create_rectangle(0, 0, canvasWidth, canvasHeight, fill="white")
+    
+    for column in range(columns):
+        coordX = cellWidth * (column + 1)
+        canvas.create_rectangle(coordX, 0, coordX + 1, canvasHeight, fill="black")
+        
+        
+    for row in range(rows):
+        coordY = cellHeight * (row + 1)
+        canvas.create_rectangle(0, coordY, canvasWidth, coordY + 1, fill="black")
+        
+    
+    """
+    for cellCoord in cellsAlive:
+        coordX = cellCoord[0] * cellWidth
+        coordY = cellCoord[1] * cellHeight
+        canvas.create_rectangle(coordX, coordY, coordX + cellWidth - 1, coordY + cellHeight - 1, fill=cellsAlive[cellCoord].color)
+    """
+    for x in range(0, canvasWidth + 1, cellWidth):
+        for y in range(0, canvasHeight + 1, cellHeight):
+            coordX = x
+            coordY = y
+            elements.append(canvas.create_rectangle(coordX, coordY, coordX + cellWidth - 1, coordY + cellHeight - 1, fill="white"))
+    
+    return elements
     
     
 def initMenuBase(root : 'tkinter.Tk') -> 'tkinter.Frame':
@@ -166,8 +210,8 @@ def clickCell(event : 'tkinter.Event', cellsAlive : dict, cellWidth : int, cellH
     coordX = (event.x - (event.x%cellWidth)) / cellWidth
     coordY = (event.y - (event.y%cellHeight)) / cellHeight
 
-    colors = sorted(colors).reverse()
     colors_size = len(colors)
+    colors = sorted(colors).reverse()
     
     if (coordX, coordY) in cellsAlive:
         cell = cellsAlive[(coordX, coordY)]
@@ -203,35 +247,19 @@ def initEvent(canvas : 'tkinter.Canvas', cellsAlive : dict, rows : int, columns 
 
 
 
-def render(canvas : 'tkinter.Canvas', cellsAlive : dict, rows : int, columns : int) -> None:
+def render(canvas : 'tkinter.Canvas', elements : list, cellsAlive : dict, columns : int) -> None:
     """
     Cette fonction calcule le rendu du canvas.
     
     param : canvas - Le canvas de l'interface graphique.
+    param : elements - Les éléments de l'interface graphique.
     param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
-    param : rows - Le nombre de lignes.
     param : columns - Le nombre de colonnes.
     """
-    canvasWidth = int(canvas.cget("width"))
-    canvasHeight = int(canvas.cget("height"))
-    
-    cellWidth = canvasWidth // columns
-    cellHeight = canvasHeight // rows
-    
-    canvas.create_rectangle(0, 0, canvasWidth, canvasHeight, fill="white")
-    
-    
-    for column in range(columns):
-        coordX = cellWidth * (column + 1)
-        canvas.create_rectangle(coordX, 0, coordX + 1, canvasHeight, fill="black")
-        
-        
-    for row in range(rows):
-        coordY = cellHeight * (row + 1)
-        canvas.create_rectangle(0, coordY, canvasWidth, coordY + 1, fill="black")
-        
-    
+
+    for element in elements:
+        canvas.itemconfig(element, fill="white")
+
     for cellCoord in cellsAlive:
-        coordX = cellCoord[0] * cellWidth
-        coordY = cellCoord[1] * cellHeight
-        canvas.create_rectangle(coordX, coordY, coordX + cellWidth - 1, coordY + cellHeight - 1, fill=cellsAlive[cellCoord].color)
+        offset = cellCoord[0] + cellCoord[1] * columns + 1
+        canvas.itemconfig(elements[offset], fill=cellsAlive[cellCoord].color)
