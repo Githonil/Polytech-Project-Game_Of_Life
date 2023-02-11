@@ -145,8 +145,13 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     """
     for cellCoord in cellsAlive:
 
+        neighbors = []
+
         for x in range(-1, 2, 1):
             for y in range(-1, 2, 1):
+
+                if x == 0 and y == 0:
+                    continue
 
                 coordX = x + cellCoord[0]
                 coordY = y + cellCoord[1]
@@ -157,7 +162,9 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
                 if not (coordX, coordY) in cellsAlive:
                     cellsAlive[(coordX, coordY)] = Cell(False)
 
-                cellsAlive[cellCoord].analyze()
+                neighbors.append(cellsAlive[((coordX, coordY))])
+
+        cellsAlive[cellCoord].analyze(neighbors)
 
 
 
