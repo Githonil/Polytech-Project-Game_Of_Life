@@ -96,7 +96,7 @@ def addCell(cellsAlive : dict, x : int, y : int) -> None:
     """
     Cette fonction ajoute une cellule vivante dans cellsAlive.
 
-    param : cellsAlive contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     param : x - La composante X de la cellule.
     param : y - La composante Y de la cellule.
     """
@@ -108,7 +108,7 @@ def removeCell(cellsAlive : dict, x : int, y : int) -> None:
     """
     Cette fonction ajoute une cellule vivante dans cellsAlive.
 
-    param : cellsAlive contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     param : x - La composante X de la cellule.
     param : y - La composante Y de la cellule.
     """
@@ -139,7 +139,7 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     """
     Cette fonction analyse toutes les cellules.
 
-    param : cellsAlive contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     param : rows - Le nombre de lignes de la grille.
     param : columns - Le nombre de colonnes de la grille.
     """
@@ -165,7 +165,7 @@ def update(cellsAlive : dict) -> None:
     """
     Cette fonction met à jour toutes les cellules.
 
-    param : cellsAlive contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     """
     for cellCoord in cellsAlive:
         cellsAlive[cellCoord].update()
