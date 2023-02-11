@@ -32,28 +32,27 @@ class Cell(game_of_life_engine.Cell):
 
 
     @color.setter
-    def color(self, value : str) -> None:
+    def color(self, color : str) -> None:
         """
-        Cette méthode est interdite !
-
-        raise : PermissionError - Si vous tentez d'accéder l'attribut.
+        Cette méthode modifie la couleur de la cellule.
         """
-        raise PermissionError("You don't have the access to change this attribute.")
+        self.__color = color
     
 
 
 
 
 
-def addCell(cellsAlive : dict, x : int, y : int) -> None:
+def addCell(cellsAlive : dict, x : int, y : int, color : str) -> None:
     """
     Cette fonction ajoute une cellule vivante dans cellsAlive.
 
     param : cellsAlive contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     param : x - La composante X de la cellule.
     param : y - La composante Y de la cellule.
+    param : color - La couleur de la cellule.
     """
-    game_of_life_engine.addCell(cellsAlive, x, y)
+    cellsAlive[(x, y)] = Cell(True, color)
 
 
 
