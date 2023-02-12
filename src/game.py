@@ -67,7 +67,7 @@ class Game:
         self.__root.protocol("WM_DELETE_WINDOW", func=self.__stop)
 
         while self.__runningLoop:
-            self.__framesUpdate(0) #TODO: Refaire le render car tkinter est codé avec le cul.
+            #self.__framesUpdate(0) #TODO: Refaire le render car tkinter est codé avec le cul.
             if self.__running[0]:
                 self.__ticksUpdate(self.__tps.get())
         
