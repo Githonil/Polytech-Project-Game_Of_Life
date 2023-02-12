@@ -32,12 +32,11 @@ def initCanvas(root : 'tkinter.Tk', width : int, height : int) -> 'tkinter.Canva
 
 
 
-def initRender(canvas : 'tkinter.Canvas', cellsAlive : dict, rows : int, columns : int) -> list:
+def initRender(canvas : 'tkinter.Canvas', rows : int, columns : int) -> list:
     """
     Cette fonction initialise le rendu du canvas.
     
     param : canvas - Le canvas de l'interface graphique.
-    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     param : rows - Le nombre de lignes.
     param : columns - Le nombre de colonnes.
     return : Les éléments de l'écran.
@@ -67,8 +66,8 @@ def initRender(canvas : 'tkinter.Canvas', cellsAlive : dict, rows : int, columns
         coordY = cellCoord[1] * cellHeight
         canvas.create_rectangle(coordX, coordY, coordX + cellWidth - 1, coordY + cellHeight - 1, fill=cellsAlive[cellCoord].color)
     """
-    for x in range(0, canvasWidth + 1, cellWidth):
-        for y in range(0, canvasHeight + 1, cellHeight):
+    for y in range(0, canvasHeight + 1, cellHeight):
+        for x in range(0, canvasWidth + 1, cellWidth):
             coordX = x
             coordY = y
             elements.append(canvas.create_rectangle(coordX, coordY, coordX + cellWidth - 1, coordY + cellHeight - 1, fill="white"))
@@ -214,17 +213,24 @@ def clickCell(event : 'tkinter.Event', cellsAlive : dict, cellWidth : int, cellH
     colors = sorted(colors).reverse()
     if colors_size == 0:
         colors = []
+
+    if colors_size == 0:
+        game_of_life_supplement_engine.removeCell(cellsAlive, coordX, coordY)
     
-    if (coordX, coordY) in cellsAlive:
+    elif (coordX, coordY) in cellsAlive:
         cell = cellsAlive[(coordX, coordY)]
-        index = colors.index(cell.color)
+        try:
+            index = colors.index(cell.color)
+        except:
+            index = 0
+                
 
         if index == colors_size - 1:
             game_of_life_supplement_engine.removeCell(cellsAlive, coordX, coordY)
         else:
             cell.color = colors[index + 1]
 
-    elif colors_size != 0:
+    else:
         game_of_life_supplement_engine.addCell(cellsAlive, coordX, coordY, "red")
     
     
