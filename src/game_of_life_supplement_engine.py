@@ -77,7 +77,8 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     param : columns - Le nombre de colonnes de la grille.
     """
     #TODO: Voir l'implémentation des naissances.
-    for cellCoord in cellsAlive:
+    cellsAliveCopy = cellsAlive.copy()
+    for cellCoord in cellsAliveCopy:
         
         neighbors = []
 
