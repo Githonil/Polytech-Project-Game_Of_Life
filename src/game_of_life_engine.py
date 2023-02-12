@@ -68,7 +68,7 @@ class Cell:
             raise ValueError("The cell needs eight neighbors.")
 
         for cell in neighbors:
-            if isinstance(cell, Cell):
+            if not isinstance(cell, Cell):
                 raise ValueError("One of the cells is not a cell.")
             
             if cell.__life == True:
