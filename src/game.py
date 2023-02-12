@@ -66,8 +66,8 @@ class Game:
         self.__root.protocol("WM_DELETE_WINDOW", func=self.__stop)
 
         while self.__runningLoop:
-            print(self.__colors)
-            self.__framesUpdate(0) #TODO: Refaire le render car tkinter est codé avec le cul.
+            #print(self.__colors)
+            #self.__framesUpdate(0) #TODO: Refaire le render car tkinter est codé avec le cul.
             self.__ticksUpdate(self.__tps.get())
         
         self.__root.quit()
@@ -100,7 +100,7 @@ class Game:
         if (time.time() - self.__lastFrameTime <= framesPerSecond):
             return
         """
-        print(self.__elements)
+        #print(self.__elements)
 
         game_of_life_graphic.render(self.__canvas, self.__elements, self.__cellsAlive, self.__columns)
 
