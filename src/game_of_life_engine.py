@@ -67,6 +67,8 @@ class Cell:
         if len(neighbors) != 8:
             raise ValueError("The cell needs eight neighbors.")
 
+        self.__neighbors = 0
+
         for cell in neighbors:
             if not isinstance(cell, Cell):
                 raise ValueError("One of the cells is not a cell.")
