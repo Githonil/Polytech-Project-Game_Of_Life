@@ -163,7 +163,7 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
                 if not (coordX, coordY) in cellsAlive:
                     cellsAlive[(coordX, coordY)] = Cell(False)
 
-                neighbors.append(cellsAlive[((coordX, coordY))])
+                neighbors.append(cellsAlive[(coordX, coordY)])
 
         cellsAlive[cellCoord].analyze(neighbors)
 
