@@ -160,18 +160,40 @@ def initMenuRandom(rootMenu : 'tkinter.Frame', randomValue : 'tkinter.IntVar') -
     randomRange = tkinter.Scale(rootMenu, from_=1, to_=100, length=50, variable=randomValue, orient = tkinter.HORIZONTAL)
     randomButton.grid(row=5, column=0, columnspan=3, padx=10, pady=10)
     randomRange.grid(row=5, column=2, columnspan=3, padx=10, pady=10)
+
+
+
+def switchOn(value : list) -> None:
+    """
+    Cette méthode met la variable à True.
+
+    param : value - Le pointeur vers un booléan.
+    """
+    value[0] = True
+
+
+
+def switchOff(value : list) -> None:
+    """
+    Cette méthode met la variable à False.
+
+    param : value - Le pointeur vers un booléan.
+    """
+    value[0] = False
     
     
     
-def initMenuStartButtons(rootMenu : 'tkinter.Frame') -> None:
+def initMenuStartButtons(rootMenu : 'tkinter.Frame', running : list, cellsAlive : dict) -> None:
     """
     Cette fonction ajoute les boutons start et stop au menu.
     
     param : rootMenu - La racine du menu.
+    param : running - Le pointeur d'un booléan qui représente si le jeu est actif.
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     """
-    startButton = tkinter.Button(rootMenu, text="Start")
-    stopButton = tkinter.Button(rootMenu, text="Stop")
-    resetButton = tkinter.Button(rootMenu, text="Reset")
+    startButton = tkinter.Button(rootMenu, text="Start", command=lambda: switchOn(running))
+    stopButton = tkinter.Button(rootMenu, text="Stop", command=lambda: switchOff(running))
+    resetButton = tkinter.Button(rootMenu, text="Reset", command=lambda: cellsAlive.clear())
     startButton.grid(row=6, column=0, padx=10, pady=10)
     stopButton.grid(row=6, column=1, padx=10, pady=10)
     resetButton.grid(row=6, column=2, padx=10, pady=10)
