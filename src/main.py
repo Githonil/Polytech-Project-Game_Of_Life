@@ -4,7 +4,7 @@ def main() -> None:
     """
     La fonction principale.
     """
-    gameMotor = game.Game(720, 520, 52, 72)
+    gameMotor = game.Game(720, 520, 72, 52)
     gameMotor.start()
 
 
