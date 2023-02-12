@@ -143,7 +143,8 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     param : rows - Le nombre de lignes de la grille.
     param : columns - Le nombre de colonnes de la grille.
     """
-    for cellCoord in cellsAlive:
+    cellsAliveCopy = cellsAlive.copy()
+    for cellCoord in cellsAliveCopy:
 
         neighbors = []
 
@@ -174,7 +175,8 @@ def update(cellsAlive : dict) -> None:
 
     param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     """
-    for cellCoord in cellsAlive:
+    cellsAliveCopy = cellsAlive.copy()
+    for cellCoord in cellsAliveCopy:
         cellsAlive[cellCoord].update()
         
         if cellsAlive[cellCoord].life == False:
