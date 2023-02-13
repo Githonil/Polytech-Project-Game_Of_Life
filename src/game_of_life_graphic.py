@@ -1,6 +1,8 @@
 import game_of_life_supplement_engine
 
 import tkinter
+from tkinter import filedialog
+import pickle
 
 def initRoot() -> 'tkinter.Tk':
     """
@@ -190,17 +192,45 @@ def initMenuStartButtons(rootMenu : 'tkinter.Frame', running : list, cellsAlive 
     startButton.grid(row=6, column=0, padx=10, pady=10)
     stopButton.grid(row=6, column=1, padx=10, pady=10)
     resetButton.grid(row=6, column=2, padx=10, pady=10)
+
+
+
+def save(cellsAlive : dict) -> None:
+    """
+    Cette fonction sauvegarde les données du jeu.
+
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    """
+    file = filedialog.asksaveasfile(initialdir="./", mode="wb")
+    pickle.dump(cellsAlive, file)
+    file.close()
+
+
+
+def load(cellsAlive : dict) -> None:
+    """
+    Cette fonction charge les données du jeu.
+
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    """
+    file = filedialog.askopenfile(initialdir="./", mode="rb")
+    cells = pickle.load(file)
+    cellsAlive.clear()
+    for cellCoord in cells:
+        cellsAlive[cellCoord] = cells[cellCoord]
+    file.close()
     
     
     
-def initMenuSaveButtons(rootMenu : 'tkinter.Frame') -> None:
+def initMenuSaveButtons(rootMenu : 'tkinter.Frame', cellsAlive : dict) -> None:
     """
     Cette fonction ajoute les boutons de sauvegarde et d'importation au menu.
     
     param : rootMenu - La racine du menu.
+    param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
     """
-    saveButton = tkinter.Button(rootMenu, text="Save")
-    importButton = tkinter.Button(rootMenu, text="Import")
+    saveButton = tkinter.Button(rootMenu, text="Save", command=lambda: save(cellsAlive))
+    importButton = tkinter.Button(rootMenu, text="Import", command=lambda: load(cellsAlive))
     saveButton.grid(row=6, column=3, padx=10, pady=10)
     importButton.grid(row=6, column=4, padx=10, pady=10)
 
