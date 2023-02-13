@@ -235,13 +235,13 @@ def clickCell(event : 'tkinter.Event', cellsAlive : dict, cellWidth : int, cellH
             index = 0
                 
 
-        if index == colors_size - 1:
-            game_of_life_supplement_engine.removeCell(cellsAlive, coordX, coordY)
-        else:
+        if index != colors_size - 1:
             cell.color = colors[index + 1]
+        else:
+            game_of_life_supplement_engine.removeCell(cellsAlive, coordX, coordY)
 
     elif colors_size != 0:
-        game_of_life_supplement_engine.addCell(cellsAlive, coordX, coordY, "red")
+        game_of_life_supplement_engine.addCell(cellsAlive, coordX, coordY, colors[0])
     
     
     
@@ -285,8 +285,8 @@ def render(root : 'tkinter.Tk', canvas : 'tkinter.Canvas', elements : dict, cell
     for elementCoord in elementsCopy:
         #canvas.itemconfig(element, fill="white")
         if not elementCoord in cellsAlive:
-            del elements[elementCoord]
             canvas.delete(root, elements[elementCoord])
+            del elements[elementCoord]
 
     for cellCoord in cellsAlive:
         if not cellCoord in elements:
