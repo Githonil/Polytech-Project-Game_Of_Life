@@ -38,7 +38,7 @@ class Game:
         game_of_life_graphic.initMenuColor(self.__menu, self.__colors)
         game_of_life_graphic.initMenuRandom(self.__menu, self.__random)
         game_of_life_graphic.initMenuStartButtons(self.__menu, self.__running, self.__cellsAlive)
-        game_of_life_graphic.initMenuSaveButtons(self.__menu) #TODO: Mettre à jour le graphic.
+        game_of_life_graphic.initMenuSaveButtons(self.__menu, self.__cellsAlive) #TODO: Mettre à jour le graphic.
 
 
 
