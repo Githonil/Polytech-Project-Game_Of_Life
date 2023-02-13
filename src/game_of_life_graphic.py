@@ -229,6 +229,7 @@ def clickCell(event : 'tkinter.Event', cellsAlive : dict, cellWidth : int, cellH
             return
 
         cell = cellsAlive[(coordX, coordY)]
+        index = 0
         try:
             index = colors.index(cell.color)
         except:
@@ -293,5 +294,7 @@ def render(root : 'tkinter.Tk', canvas : 'tkinter.Canvas', elements : dict, cell
             coordX = cellCoord[0] * cellWidth
             coordY = cellCoord[1] * cellHeight
             elements[cellCoord] = canvas.create_rectangle(coordX, coordY, coordX + cellWidth, coordY + cellHeight, fill=cellsAlive[cellCoord].color)
+        else:
+            canvas.itemconfig(elements[cellCoord], fill=cellsAlive[cellCoord].color)
 
     canvas.update()
