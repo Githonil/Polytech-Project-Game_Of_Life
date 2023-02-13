@@ -31,7 +31,8 @@ class Game:
         self.__random = tkinter.IntVar()
         self.__running = [False]
         self.__canvas = game_of_life_graphic.initCanvas(self.__root, width, height)
-        self.__elements = game_of_life_graphic.initRender(self.__canvas, self.__rows, self.__columns)
+        self.__elements = {}
+        game_of_life_graphic.initRender(self.__canvas, self.__rows, self.__columns)
         self.__menu = game_of_life_graphic.initMenuBase(self.__root)
         game_of_life_graphic.initMenuTPSRange(self.__menu, self.__tps) #TODO: Mettre à jour le graphic.
         game_of_life_graphic.initMenuColor(self.__menu, self.__colors)
@@ -70,9 +71,10 @@ class Game:
         self.__root.protocol("WM_DELETE_WINDOW", func=self.__stop)
 
         while self.__runningLoop:
-            self.__framesUpdate(0) #TODO: Refaire le render car tkinter est codé avec le cul.
             if self.__running[0]:
                 self.__ticksUpdate(self.__tps.get())
+                
+            self.__framesUpdate(0) #TODO: Refaire le render car tkinter est codé avec le cul.
 
         self.__root.destroy()
 
@@ -105,6 +107,6 @@ class Game:
             return
         """
 
-        game_of_life_graphic.render(self.__canvas, self.__elements, self.__cellsAlive, self.__columns)
+        game_of_life_graphic.render(self.__root, self.__canvas, self.__elements, self.__cellsAlive, self.__rows, self.__columns)
 
         self.__lastFrameTime = time.time()
