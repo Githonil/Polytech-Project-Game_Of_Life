@@ -32,25 +32,19 @@ def initCanvas(root : 'tkinter.Tk', width : int, height : int) -> 'tkinter.Canva
 
 
 
-def initRender(canvas : 'tkinter.Canvas', rows : int, columns : int) -> list:
+def initRender(canvas : 'tkinter.Canvas', rows : int, columns : int):
     """
     Cette fonction initialise le rendu du canvas.
     
     param : canvas - Le canvas de l'interface graphique.
     param : rows - Le nombre de lignes.
     param : columns - Le nombre de colonnes.
-    return : Les éléments de l'écran.
     """
-    elements = []
     canvasWidth = int(canvas.cget("width"))
     canvasHeight = int(canvas.cget("height"))
     
     cellWidth = canvasWidth // columns
     cellHeight = canvasHeight // rows
-
-    for y in range(0, canvasHeight, cellHeight):
-        for x in range(0, canvasWidth, cellWidth):
-            elements.append(canvas.create_rectangle(x, y, x + cellWidth, y + cellHeight, fill="white"))
     
     for x in range(cellWidth, canvasWidth, cellWidth):
         canvas.create_rectangle(x, 0, x, canvasHeight, fill="black")
@@ -67,9 +61,8 @@ def initRender(canvas : 'tkinter.Canvas', rows : int, columns : int) -> list:
         canvas.create_rectangle(coordX, coordY, coordX + cellWidth - 1, coordY + cellHeight - 1, fill=cellsAlive[cellCoord].color)
     """
     
-    return elements
     
-    
+
 def initMenuBase(root : 'tkinter.Tk') -> 'tkinter.Frame':
     """
     Cette fonction initialise le menu de l'interface graphique.
@@ -272,21 +265,33 @@ def initEvent(canvas : 'tkinter.Canvas', cellsAlive : dict, rows : int, columns 
 
 
 
-def render(canvas : 'tkinter.Canvas', elements : list, cellsAlive : dict, columns : int) -> None:
+def render(root : 'tkinter.Tk', canvas : 'tkinter.Canvas', elements : dict, cellsAlive : dict, rows : int, columns : int) -> None:
     """
     Cette fonction calcule le rendu du canvas.
     
     param : canvas - Le canvas de l'interface graphique.
-    param : elements - Les éléments de l'interface graphique.
+    param : elements - Les éléments de l'interface graphique. Clef : (x, y) et la valeur : le dessin sur le canvas.
     param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
+    param : rows - Le nombre de lignes.
     param : columns - Le nombre de colonnes.
     """
+    canvasWidth = int(canvas.cget("width"))
+    canvasHeight = int(canvas.cget("height"))
+    
+    cellWidth = canvasWidth // columns
+    cellHeight = canvasHeight // rows
 
-    for element in elements:
-        canvas.itemconfig(element, fill="white")
+    elementsCopy = elements.copy()
+    for elementCoord in elementsCopy:
+        #canvas.itemconfig(element, fill="white")
+        if not elementCoord in cellsAlive:
+            del elements[elementCoord]
+            canvas.delete(root, elements[elementCoord])
 
     for cellCoord in cellsAlive:
-        offset = cellCoord[0] + cellCoord[1] * columns
-        canvas.itemconfig(elements[offset], fill=cellsAlive[cellCoord].color)
+        if not cellCoord in elements:
+            coordX = cellCoord[0] * cellWidth
+            coordY = cellCoord[1] * cellHeight
+            elements[cellCoord] = canvas.create_rectangle(coordX, coordY, coordX + cellWidth, coordY + cellHeight, fill=cellsAlive[cellCoord].color)
 
     canvas.update()
