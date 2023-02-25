@@ -35,6 +35,10 @@ class GameOfLifeGraphic:
         self.__randomRange = tkinter.IntVar()
         self.__rowIndex = 0
         self.__columnIndex = 0
+        self.__font = "Times_New_Roman 12"
+        self.__sprites = {}
+        self.__mouseX = 0
+        self.__mouseY = 0
 
 
 
@@ -55,6 +59,8 @@ class GameOfLifeGraphic:
         self.__canvas.config(width=self.__width, height=self.__height, bg="white", highlightthickness=0)
         self.__canvas.grid(row=0, column=0)
 
+        self.__initRender()
+
 
 
     def __initRender(self) -> None:
@@ -62,10 +68,10 @@ class GameOfLifeGraphic:
         Cette méthode initialise le rendu.
         """
         for x in range(self.__cellWidth, self.__width, self.__cellWidth):
-            self.__canvas.create_rectangle(x, 0, x, self.__height, fill="black", outline="")
+            self.__canvas.create_rectangle(x - 1, 0, x - 1, self.__height, fill="black", outline="")
 
         for y in range(self.__cellHeight, self.__height, self.__cellHeight):
-            self.__canvas.create_rectangle(0, y, self.__width, y, fill="black", outline="")
+            self.__canvas.create_rectangle(0, y - 1, self.__width, y - 1, fill="black", outline="")
 
 
 
@@ -86,7 +92,7 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise le range du TPS.
         """
-        label = tkinter.Label(self.__menuFrame, text="Ticks per second", font="Courier 12", fg="white", bg="black")
+        label = tkinter.Label(self.__menuFrame, text="Ticks per second", font=self.__font, fg="white", bg="black")
         label.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=100, padx=10, pady=10)
         self.__rowIndex += 1
 
@@ -96,15 +102,25 @@ class GameOfLifeGraphic:
 
 
 
+    def getTimeRange(self) -> float:
+        """
+        Cette méthode renvoie le TPS.
+
+        param : Renvoie le TPS.
+        """
+        return self.__tpsRange.get()
+
+
+
     def __initRandom(self) -> None:
         """
         Cette méthode initialise les bouttons de random.
         """
-        label = tkinter.Label(self.__menuFrame, text="Random", font="Courier 12", fg="white", bg="black")
+        label = tkinter.Label(self.__menuFrame, text="Random", font=self.__font, fg="white", bg="black")
         label.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=100, padx=10, pady=10)
         self.__rowIndex += 1
 
-        self.__randomButton.config(text="Random", font="Courier 12")
+        self.__randomButton.config(text="Random", font=self.__font)
         self.__randomButton.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=3, padx=10, pady=10)
         self.__columnIndex += 2
 
@@ -112,6 +128,16 @@ class GameOfLifeGraphic:
         range.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=4, padx=10, pady=10)
         self.__columnIndex = 0
         self.__rowIndex += 1
+
+
+
+    def getRandomRange(self) -> int:
+        """
+        Cette méthode renvoie la valeur du random range.
+
+        return : Renvoie la valeur du random range.
+        """
+        return self.__randomRange.get()
 
 
 
@@ -129,15 +155,15 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise les boutons start, stop et reset.
         """
-        self.__startButton.config(text="Start", font="Courier 12")
+        self.__startButton.config(text="Start", font=self.__font)
         self.__startButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
         self.__columnIndex += 1
 
-        self.__stopButton.config(text="Stop", font="Courier 12")
+        self.__stopButton.config(text="Stop", font=self.__font)
         self.__stopButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
         self.__columnIndex += 1
 
-        self.__resetButton.config(text="Reset", font="Courier 12")
+        self.__resetButton.config(text="Reset", font=self.__font)
         self.__resetButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
         self.__columnIndex += 1
 
@@ -180,11 +206,11 @@ class GameOfLifeGraphic:
         param : row - La ligne où ça commence.
         param : column - La colonne où ça commence.
         """
-        self.__saveButton.config(text="Save", font="Courier 12")
+        self.__saveButton.config(text="Save", font=self.__font)
         self.__saveButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
         self.__columnIndex += 1
 
-        self.__importButton.config(text="Import", font="Courier 12")
+        self.__importButton.config(text="Import", font=self.__font)
         self.__importButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
 
 
@@ -215,12 +241,75 @@ class GameOfLifeGraphic:
         """
         self.__initRoot()
         self.__initCanvas()
-        self.__initRender()
         self.__initMenu()
         self.__initTimeRange()
         self.__initRandom()
         self.__initStartButton()
         self.__initSaveButton()
+
+
+
+    def __binding(self, event : 'tkinter.Event') -> None:
+        """
+        Cette méthode agît sur le binding des évènements.
+
+        param : Le registre des évènements.
+        """
+        self.__mouseX = event.x - (event.x % self.__cellWidth) // self.__columns
+        self.__mouseY = event.y - (event.y % self.__cellHeight) // self.__rows
+
+
+
+    def initEvent(self) -> None:
+        """
+        Cette méthode initialise les évènements.
+        """
+        self.__canvas.bind("<Button-1>", self.__binding)
+
+
+
+    def getMouseX(self) -> int:
+        """
+        Cette méthode renvoie l'indice de la colonne de la dernière case clicker.
+
+        return : Renvoie l'indice de la colonne de la dernière case clicker.
+        """
+        return self.__mouseX
+    
+
+
+    def getMouseY(self) -> int:
+        """
+        Cette méthode renvoie l'indice de la ligne de la dernière case clicker.
+
+        return : Renvoie l'indice de la ligne de la dernière case clicker.
+        """
+        return self.__mouseY
+
+
+
+    def render(self, coords : list) -> None:
+        """
+        Cette méthode fait le rendu de l'interface graphique.
+
+        param : coords - La liste des coordonnées d'une cellule. (coordX, coordY).
+        """
+        for coord in coords:
+            coordX = coord[0] * self.__cellWidth
+            coordY = coord[1] * self.__cellHeight
+
+            if not coord in self.__sprites:
+                self.__sprites[coord] = self.__canvas.create_rectangle(coordX, coordY, coordX + self.__cellWidth - 1, coordY + self.__cellHeight - 1, fill="black", outline="")
+
+        spritesCopy = self.__sprites.copy()
+        for sprite in spritesCopy:
+
+            if not sprite in coords:
+                self.__canvas.delete(self.__root, self.__sprites[sprite])
+                del self.__sprites[sprite]
+
+        self.__canvas.update()
+            
 
 
 
