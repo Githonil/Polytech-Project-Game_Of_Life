@@ -16,30 +16,19 @@ class Cell(game_of_life_engine.Cell):
         param : color - Le nom de la couleur en anglais, ou en hexadécimal ex: #ff00ff.
         """
         game_of_life_engine.Cell.__init__(self, life)
-        self.__color = color
-
-
-
-    @property
-    def color(self) -> None:
-        """
-        Cette méthode renvoie la couleur de la cellule.
-
-        return : Renvoie la couleur de la cellule.
-        """
-        return self.__color
+        self.color = color
+        self.__lifeduration = 4
     
 
 
-    @color.setter
-    def color(self, color : str) -> None:
+    def update(self) -> None:
         """
-        Cette méthode modifie la couleur de la cellule.
+        Cette méthode met à jour la cellule.
         """
-        self.__color = color
-    
-
-
+        game_of_life_engine.Cell.update(self)
+        
+        if self.__lifeduration > 0:
+            self.__lifeduration -= 1
 
 
 
@@ -68,6 +57,25 @@ def removeCell(cellsAlive : dict, x : int, y : int) -> None:
 
 
 
+def adjustBorder(coord : int, length : int) -> int:
+    """
+    Cette fonction ajuste une coordonnée selon une taille maximale.
+    Si la coordonnée dépasse la taille, alors elle revient à 0.
+    Si la coordonnée est en dessous de 0, alors elle revient à la taille maximale.
+    
+    param : coord - La coordonnée.
+    param : length - La taille maximale.
+    return : Renvoie la taille ajusté.
+    """
+    if coord >= length:
+        coord = 0
+    elif coord < 0:
+        coord = length - 1
+        
+    return coord
+
+
+
 def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     """
     Cette fonction analyse toutes les cellules.
@@ -91,8 +99,8 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
                 coordX = x + cellCoord[0]
                 coordY = y + cellCoord[1]
 
-                coordX = game_of_life_engine.adjustBorder(coordX, columns)
-                coordY = game_of_life_engine.adjustBorder(coordY, rows)
+                coordX = adjustBorder(coordX, columns)
+                coordY = adjustBorder(coordY, rows)
 
                 if not (coordX, coordY) in cellsAlive:
                     cellsAlive[(coordX, coordY)] = Cell(False, cellsAlive[(cellCoord[0], cellCoord[1])].color)
