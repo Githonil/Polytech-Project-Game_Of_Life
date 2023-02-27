@@ -15,7 +15,7 @@ class Cell(game_of_life_engine.Cell):
         param : life - L'état de vie. True si elle est en vie, False sinon.
         param : color - Le nom de la couleur en anglais, ou en hexadécimal ex: #ff00ff.
         """
-        game_of_life_engine.Cell.__init__(self, life)
+        super().__init__(life)
         self.color = color
         self.__lifeduration = 4
     
@@ -25,7 +25,7 @@ class Cell(game_of_life_engine.Cell):
         """
         Cette méthode met à jour la cellule.
         """
-        game_of_life_engine.Cell.update(self)
+        super().update()
         
         if self.__lifeduration > 0:
             self.__lifeduration -= 1

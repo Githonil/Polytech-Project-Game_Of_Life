@@ -96,13 +96,11 @@ def removeCell(cellsAlive : dict, x : int, y : int) -> None:
 
 
 
-def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
+def analyze(cellsAlive : dict) -> None:
     """
     Cette fonction analyse toutes les cellules.
 
     param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
-    param : rows - Le nombre de lignes de la grille.
-    param : columns - Le nombre de colonnes de la grille.
     """
     cellsAliveCopy = cellsAlive.copy()
     for cellCoord in cellsAliveCopy:
