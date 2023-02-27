@@ -15,31 +15,72 @@ class Cell(game_of_life_engine.Cell):
         param : life - L'état de vie. True si elle est en vie, False sinon.
         param : color - Le nom de la couleur en anglais, ou en hexadécimal ex: #ff00ff.
         """
-        game_of_life_engine.Cell.__init__(self, life)
-        self.__color = color
+        super().__init__(life)
+        self.color = color
+        self.__lifeduration = 4
+        self.__countColors = {}
 
 
 
-    @property
-    def color(self) -> None:
+    def analyze(self, neighbors : list) -> None:
         """
-        Cette méthode renvoie la couleur de la cellule.
+        Cette méthode analyse le voisinage d'une cellule.
 
-        return : Renvoie la couleur de la cellule.
+        param : Les voisines de la cellule, il doit en avoir exactement huit !
         """
-        return self.__color
-    
+        if len(neighbors) != 8:
+            raise ValueError("The cell needs eight neighbors.")
+
+        self.__neighbors = 0
+        countColors = {}
+
+        for cell in neighbors:
+            if not isinstance(cell, Cell):
+                raise ValueError("One of the cells is not a cell.")
+            
+            color = self.color
+            
+            if cell.__life == True:
+                if cell.color == self.color:
+                    self.__neighbors += 1
+            else:
+                if not color in cell.__countColors:
+                    cell.__countColors[color] = 0
+                cell.__countColors[color] += 1
+
+                cell.__neighbors += 1
 
 
-    @color.setter
-    def color(self, color : str) -> None:
+
+    def __colorMax(self) -> str:
         """
-        Cette méthode modifie la couleur de la cellule.
+        Cette méthode renvoie la couleur la plus répandue.
+
+        return : Renvoie la couleur la plus répandue.
         """
-        self.__color = color
-    
+        maxInt = -float('inf')
+        maxString = ""
+        for colorName in self.__countColors.keys():
 
+            if self.__countColors[colorName] > maxInt:
+                maxInt = self.__countColors[colorName]
+                maxString = colorName
 
+        return maxString
+        
+            
+
+    def update(self) -> None:
+        """
+        Cette méthode met à jour la cellule.
+        """
+        if self.__life == False:
+            self.color = self.__colorMax()
+
+        super().update()
+        
+        if self.__lifeduration > 0:
+            self.__lifeduration -= 1
 
 
 
@@ -68,6 +109,25 @@ def removeCell(cellsAlive : dict, x : int, y : int) -> None:
 
 
 
+def adjustBorder(coord : int, length : int) -> int:
+    """
+    Cette fonction ajuste une coordonnée selon une taille maximale.
+    Si la coordonnée dépasse la taille, alors elle revient à 0.
+    Si la coordonnée est en dessous de 0, alors elle revient à la taille maximale.
+    
+    param : coord - La coordonnée.
+    param : length - La taille maximale.
+    return : Renvoie la taille ajusté.
+    """
+    if coord >= length:
+        coord = 0
+    elif coord < 0:
+        coord = length - 1
+        
+    return coord
+
+
+
 def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     """
     Cette fonction analyse toutes les cellules.
@@ -77,6 +137,7 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     param : columns - Le nombre de colonnes de la grille.
     """
     #TODO: Voir l'implémentation des naissances.
+
     cellsAliveCopy = cellsAlive.copy()
     for cellCoord in cellsAliveCopy:
         
@@ -91,11 +152,11 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
                 coordX = x + cellCoord[0]
                 coordY = y + cellCoord[1]
 
-                coordX = game_of_life_engine.adjustBorder(coordX, columns)
-                coordY = game_of_life_engine.adjustBorder(coordY, rows)
+                coordX = adjustBorder(coordX, columns)
+                coordY = adjustBorder(coordY, rows)
 
                 if not (coordX, coordY) in cellsAlive:
-                    cellsAlive[(coordX, coordY)] = Cell(False, cellsAlive[(cellCoord[0], cellCoord[1])].color)
+                    cellsAlive[(coordX, coordY)] = Cell(False, "None")
 
                 neighbors.append(cellsAlive[(coordX, coordY)])
 

@@ -36,28 +36,6 @@ class Cell:
     
 
 
-    @property
-    def neighbors(self) -> None:
-        """
-        Cette méthode est interdite !
-
-        raise : PermissionError - Si vous tentez d'accéder l'attribut.
-        """
-        raise PermissionError("You don't have the acces to change this attribute.")
-    
-
-
-    @neighbors.setter
-    def neighbors(self, value : int) -> None:
-        """
-        Cette méthode est interdite !
-
-        raise : PermissionError - Si vous tentez d'accéder l'attribut.
-        """
-        raise PermissionError("You don't have the access to change this attribute.")
-    
-
-
     def analyze(self, neighbors : list) -> None:
         """
         Cette méthode analyse le voisinage d'une cellule.
@@ -118,32 +96,11 @@ def removeCell(cellsAlive : dict, x : int, y : int) -> None:
 
 
 
-def adjustBorder(coord : int, length : int) -> int:
-    """
-    Cette fonction ajuste une coordonnée selon une taille maximale.
-    Si la coordonnée dépasse la taille, alors elle revient à 0.
-    Si la coordonnée est en dessous de 0, alors elle revient à la taille maximale.
-    
-    param : coord - La coordonnée.
-    param : length - La taille maximale.
-    return : Renvoie la taille ajusté.
-    """
-    if coord > length:
-        coord = 0
-    elif coord < 0:
-        coord = length
-        
-    return coord
-
-
-
-def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
+def analyze(cellsAlive : dict) -> None:
     """
     Cette fonction analyse toutes les cellules.
 
     param : cellsAlive - Contient toutes les cellules vivantes. Clef : (x, y) ; Valeur : Cell.
-    param : rows - Le nombre de lignes de la grille.
-    param : columns - Le nombre de colonnes de la grille.
     """
     cellsAliveCopy = cellsAlive.copy()
     for cellCoord in cellsAliveCopy:
@@ -158,9 +115,6 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
 
                 coordX = x + cellCoord[0]
                 coordY = y + cellCoord[1]
-
-                coordX = adjustBorder(coordX, columns)
-                coordY = adjustBorder(coordY, rows)
 
                 if not (coordX, coordY) in cellsAlive:
                     cellsAlive[(coordX, coordY)] = Cell(False)
