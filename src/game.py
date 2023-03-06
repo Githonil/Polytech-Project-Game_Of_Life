@@ -1,16 +1,15 @@
-import game_of_life_supplement_engine
+import game_of_life_engine
 import game_of_life_graphic
 
-import tkinter
 import time
 import threading
 
-class Game:
+class GameOfLife:
     """
     Cette classe représente le jeu : Game of Life.
     """
 
-    def __init__(self, width : int, height : int, columns : int, rows : int) -> 'Game':
+    def __init__(self, width : int, height : int, columns : int, rows : int) -> 'GameOfLife':
         """
         Le constructeur d'un jeu.
 
@@ -19,25 +18,98 @@ class Game:
         param : columns - Le nombre de colonnes dans la grille.
         param : rows - Le nombre de lignes dans la grille.
         """
-        self.__cellsAlive = {}
+        self.__width = width
+        self.__height = height
         self.__columns = columns
         self.__rows = rows
-        self.__colors = set()
-        self.__lastTickTime = 0
-        self.__lastFrameTime = 0
-        self.__runningLoop = True
-        self.__root = game_of_life_graphic.initRoot()
-        self.__tps = tkinter.IntVar()
-        self.__random = tkinter.IntVar()
-        self.__running = [False]
-        self.__canvas = game_of_life_graphic.initCanvas(self.__root, width, height)
-        self.__elements = game_of_life_graphic.initRender(self.__canvas, self.__rows, self.__columns)
-        self.__menu = game_of_life_graphic.initMenuBase(self.__root)
-        game_of_life_graphic.initMenuTPSRange(self.__menu, self.__tps) #TODO: Mettre à jour le graphic.
-        game_of_life_graphic.initMenuColor(self.__menu, self.__colors)
-        game_of_life_graphic.initMenuRandom(self.__menu, self.__random)
-        game_of_life_graphic.initMenuStartButtons(self.__menu, self.__running, self.__cellsAlive)
-        game_of_life_graphic.initMenuSaveButtons(self.__menu) #TODO: Mettre à jour le graphic.
+        self.__cellsAlive = {}
+        self.__graphic = game_of_life_graphic.GameOfLifeGraphic(width, height, columns, rows)
+        self.__graphic.init()
+        self.__graphic.initQuitButton(self.__stop)
+        self.__init()
+        self.__running = False
+        self.__mainLoop = True
+        self.__lastTickTime = time.time()
+        self.__lastFrameTime = time.time()
+
+
+
+    def __initRandomButton(self) -> None:
+        """
+        Cette méthode initialise le bouton random.
+        """
+        import random
+        import math
+
+        numberCells = math.ceil((self.__rows * self.__columns - len(self.__cellsAlive)) *  (self.__graphic.getRandomRange() / 100))
+        print(numberCells)
+        count = 0
+
+        for i in range(numberCells):
+            coordX = random.randint(0, self.__columns - 1)
+            coordY = random.randint(0, self.__rows - 1)
+
+            while (coordX, coordY) in self.__cellsAlive:
+                coordX = random.randint(0, self.__columns - 1)
+                coordY = random.randint(0, self.__rows - 1)
+
+            game_of_life_engine.addCell(self.__cellsAlive, coordX, coordY)
+            count += 1
+
+        print(count)
+
+
+
+    def __initStartButton(self) -> None:
+        """
+        Cette méthode initialise le bouton start.
+        """
+        self.__running = True
+
+
+
+    def __initStopButton(self) -> None:
+        """
+        Cette méthode initialise le bouton stop.
+        """
+        self.__running = False
+
+
+
+    def __initResetButton(self) -> None:
+        """
+        Cette méthode initialise le bouton reset.
+        """
+        self.__running = False
+        self.__cellsAlive.clear()
+
+
+
+    def __initSaveButton(self) -> None:
+        """
+        Cette méthode initialise le bouton save.
+        """
+        game_of_life_graphic.GameOfLifeGraphic.save(self.__cellsAlive)
+
+
+
+    def __initImportButton(self) -> None:
+        """
+        Cette méthode initialse le bouton import.
+        """
+        self.__cellsAlive = game_of_life_graphic.GameOfLifeGraphic.import_obj()
+
+
+    def __init(self) -> None:
+        """
+        Cette méthode initialise les butons.
+        """
+        self.__graphic.setRandomButton(self.__initRandomButton)
+        self.__graphic.setStartButton(self.__initStartButton)
+        self.__graphic.setStopButton(self.__initStopButton)
+        self.__graphic.setResetButton(self.__initResetButton)
+        self.__graphic.setSaveButton(self.__initSaveButton)
+        self.__graphic.setImportButton(self.__initImportButton)
 
 
 
@@ -45,10 +117,7 @@ class Game:
         """
         Cette méthode lance le jeu.
         """
-        loop = threading.Thread(target=self.__loop)
-        loop.start()
-
-        self.__root.mainloop()
+        self.__loop()
 
 
 
@@ -56,22 +125,52 @@ class Game:
         """
         Cette méthode arrête la boucle du jeu.
         """
-        self.__runningLoop = False
+        self.__mainLoop = False
+
+
+
+    def __event(self, oldX, oldY) -> tuple:
+        """
+        Cette méthode gère les évènements.
+
+        param : oldX - La composante X de l'ancienne coordonnée.
+        param : oldY - La composante Y de l'ancienne coordonnée.
+        return : Renvoie la nouvelle coordonnée (coordX, coordY).
+        """
+        coordX, coordY = self.__graphic.getMouseX(), self.__graphic.getMouseY()
+
+        if coordX == -1 and coordY == -1:
+            return (oldX, oldY)
+
+        if self.__graphic.motionDetect and oldX == coordX and oldY == coordY:
+            self.__graphic.motionDetect = False
+            return (oldX, oldY)
+
+        if self.__graphic.eventDetect and not (coordX, coordY) in self.__cellsAlive:
+            game_of_life_engine.addCell(self.__cellsAlive, coordX, coordY)
+        elif self.__graphic.eventDetect:
+            game_of_life_engine.removeCell(self.__cellsAlive, coordX, coordY)
+            
+        self.__graphic.eventDetect = False
+
+        return (coordX, coordY)
+
 
 
     def __loop(self) -> None:
         """
         Cette méthode contient la boucle principale du jeu.
         """
-        game_of_life_graphic.initEvent(self.__canvas, self.__cellsAlive, self.__rows, self.__columns, self.__colors)
-        self.__root.protocol("WM_DELETE_WINDOW", func=self.__stop)
+        oldX = -1
+        oldY = -1
+        while self.__mainLoop:
 
-        while self.__runningLoop:
-            #self.__framesUpdate(0) #TODO: Refaire le render car tkinter est codé avec le cul.
-            if self.__running[0]:
-                self.__ticksUpdate(self.__tps.get())
-        
-        self.__root.quit()
+            oldX, oldY = self.__event(oldX, oldY)
+
+            self.__framesUpdate(1/60)
+
+            if self.__running:
+                self.__ticksUpdate(self.__graphic.getTimeRange())
 
 
 
@@ -84,8 +183,8 @@ class Game:
         if (time.time() - self.__lastTickTime <= ticksPerSecond):
             return
             
-        game_of_life_supplement_engine.analyze(self.__cellsAlive, self.__rows, self.__columns)
-        game_of_life_supplement_engine.update(self.__cellsAlive)
+        game_of_life_engine.analyze(self.__cellsAlive)
+        game_of_life_engine.update(self.__cellsAlive)
         
         self.__lastTickTime = time.time()
 
@@ -97,11 +196,9 @@ class Game:
 
         param : framesPerSecond - FPS.
         """
-        """
         if (time.time() - self.__lastFrameTime <= framesPerSecond):
             return
-        """
 
-        game_of_life_graphic.render(self.__canvas, self.__elements, self.__cellsAlive, self.__columns)
+        self.__graphic.render(list(self.__cellsAlive.keys()))
 
         self.__lastFrameTime = time.time()

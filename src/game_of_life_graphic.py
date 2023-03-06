@@ -37,8 +37,10 @@ class GameOfLifeGraphic:
         self._columnIndex = 0
         self.__font = "Times_New_Roman 12"
         self.__sprites = {}
-        self.__mouseX = 0
-        self.__mouseY = 0
+        self.__mouseX = -1
+        self.__mouseY = -1
+        self.eventDetect = False #Cet attribut permet de dire si un évènement à eu lieu. à remettre à False si jamais.
+        self.motionDetect = False #Cet attribut permet de dire si un évènement à mouvement à eu lieu. à remettre à False si jamais.
 
 
 
@@ -67,10 +69,10 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise le rendu.
         """
-        for x in range(self.__cellWidth, self.__width, self.__cellWidth):
+        for x in range(self.__cellWidth, self.__width + 1, self.__cellWidth):
             self.__canvas.create_rectangle(x - 1, 0, x - 1, self.__height, fill="black", outline="")
 
-        for y in range(self.__cellHeight, self.__height, self.__cellHeight):
+        for y in range(self.__cellHeight, self.__height + 1, self.__cellHeight):
             self.__canvas.create_rectangle(0, y - 1, self.__width, y - 1, fill="black", outline="")
 
 
@@ -96,7 +98,7 @@ class GameOfLifeGraphic:
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
 
-        range = tkinter.Scale(self._menuFrame, variable=self.__tpsRange, orient=tkinter.HORIZONTAL)
+        range = tkinter.Scale(self._menuFrame, from_=0.01, to_=2.0, resolution=0.01, variable=self.__tpsRange, orient=tkinter.HORIZONTAL)
         range.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
 
@@ -116,7 +118,7 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise les bouttons de random.
         """
-        label = tkinter.Label(self._menuFrame, text="Random", font=self.__font, fg="white", bg="black")
+        label = tkinter.Label(self._menuFrame, text="Random (in %)", font=self.__font, fg="white", bg="black")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
 
@@ -124,7 +126,7 @@ class GameOfLifeGraphic:
         self.__randomButton.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 2
 
-        range = tkinter.Scale(self._menuFrame, variable=self.__randomRange, orient=tkinter.HORIZONTAL)
+        range = tkinter.Scale(self._menuFrame, from_=25, to_=100, resolution=1, variable=self.__randomRange, orient=tkinter.HORIZONTAL)
         range.grid(row=self._rowIndex, column=self._columnIndex, columnspan=4, padx=10, pady=10)
         self._columnIndex = 0
         self._rowIndex += 1
@@ -246,25 +248,39 @@ class GameOfLifeGraphic:
         self._initRandom()
         self._initStartButton()
         self._initSaveButton()
+        self.__initEvent()
 
 
 
     def __binding(self, event : 'tkinter.Event') -> None:
         """
-        Cette méthode agît sur le binding des évènements.
+        Cette méthode agit sur le binding des évènements.
 
         param : Le registre des évènements.
         """
-        self.__mouseX = event.x - (event.x % self.__cellWidth) // self.__columns
-        self.__mouseY = event.y - (event.y % self.__cellHeight) // self.__rows
+        self.__mouseX = (event.x - (event.x % self.__cellWidth))  // self.__cellWidth
+        self.__mouseY = (event.y - (event.y % self.__cellHeight))  // self.__cellHeight
+        self.eventDetect = True
 
 
 
-    def initEvent(self) -> None:
+    def __bindingMotion(self, event : 'tkinter.Event') -> None:
+        """
+        Cette méthode agit sur le binding des évènements en mouvement.
+
+        param : Le registre des évènements.
+        """
+        self.motionDetect = True
+        self.__binding(event)
+
+
+
+    def __initEvent(self) -> None:
         """
         Cette méthode initialise les évènements.
         """
         self.__canvas.bind("<Button-1>", self.__binding)
+        self.__canvas.bind("<B1-Motion>", self.__bindingMotion)
 
 
 
@@ -274,7 +290,9 @@ class GameOfLifeGraphic:
 
         return : Renvoie l'indice de la colonne de la dernière case clicker.
         """
-        return self.__mouseX
+        old = self.__mouseX
+        self.__mouseX = -1
+        return old
     
 
 
@@ -284,7 +302,19 @@ class GameOfLifeGraphic:
 
         return : Renvoie l'indice de la ligne de la dernière case clicker.
         """
-        return self.__mouseY
+        old = self.__mouseY
+        self.__mouseY = -1
+        return old
+    
+
+
+    def initQuitButton(self, func : 'function') -> None:
+        """
+        Cette méthode met à jour le bouton fermer de l'interface graphique.
+
+        param : func - La fonction.
+        """
+        self.__root.protocol("WM_DELETE_WINDOW", func=func)
 
 
 
