@@ -1,12 +1,13 @@
-import game_of_life_engine
-import game_of_life_graphic
+import game_of_life_supplement_engine
+import game_of_life_supplement_graphic
 
 import time
-import threading
 
 class GameOfLife:
     """
     Cette classe représente le jeu : Game of Life.
+    Ajout du jeu:
+    - Des couleurs aux cellules.
     """
 
     def __init__(self, width : int, height : int, columns : int, rows : int) -> 'GameOfLife':
@@ -18,12 +19,10 @@ class GameOfLife:
         param : columns - Le nombre de colonnes dans la grille.
         param : rows - Le nombre de lignes dans la grille.
         """
-        self.__width = width
-        self.__height = height
         self.__columns = columns
         self.__rows = rows
         self.__cellsAlive = {}
-        self.__graphic = game_of_life_graphic.GameOfLifeGraphic(width, height, columns, rows)
+        self.__graphic = game_of_life_supplement_graphic.GameOfLifeGraphic(width, height, columns, rows)
         self.__graphic.init()
         self.__graphic.initQuitButton(self.__stop)
         self.__init()
@@ -41,9 +40,11 @@ class GameOfLife:
         import random
         import math
 
+        colors = self.__graphic.colorsSet
+        if len(colors) == 0:
+            return
+        
         numberCells = math.ceil((self.__rows * self.__columns - len(self.__cellsAlive)) *  (self.__graphic.getRandomRange() / 100))
-        print(numberCells)
-        count = 0
 
         for i in range(numberCells):
             coordX = random.randint(0, self.__columns - 1)
@@ -53,10 +54,9 @@ class GameOfLife:
                 coordX = random.randint(0, self.__columns - 1)
                 coordY = random.randint(0, self.__rows - 1)
 
-            game_of_life_engine.addCell(self.__cellsAlive, coordX, coordY)
-            count += 1
+            color = random.choice(list(colors))
 
-        print(count)
+            game_of_life_supplement_engine.addCell(self.__cellsAlive, coordX, coordY, color)
 
 
 
@@ -89,7 +89,7 @@ class GameOfLife:
         """
         Cette méthode initialise le bouton save.
         """
-        game_of_life_graphic.GameOfLifeGraphic.save(self.__cellsAlive)
+        game_of_life_supplement_graphic.GameOfLifeGraphic.save(self.__cellsAlive)
 
 
 
@@ -97,7 +97,7 @@ class GameOfLife:
         """
         Cette méthode initialse le bouton import.
         """
-        self.__cellsAlive = game_of_life_graphic.GameOfLifeGraphic.import_obj()
+        self.__cellsAlive = game_of_life_supplement_graphic.GameOfLifeGraphic.import_obj()
 
 
     def __init(self) -> None:
@@ -137,19 +137,40 @@ class GameOfLife:
         param : oldY - La composante Y de l'ancienne coordonnée.
         return : Renvoie la nouvelle coordonnée (coordX, coordY).
         """
+        colors_size = len(self.__graphic.colorsSet)
+        colors = sorted(list(self.__graphic.colorsSet))
+        colors.reverse()
+
         coordX, coordY = self.__graphic.getMouseX(), self.__graphic.getMouseY()
 
-        if coordX == -1 and coordY == -1:
+        if (coordX == -1 and coordY == -1):
             return (oldX, oldY)
 
         if self.__graphic.motionDetect and oldX == coordX and oldY == coordY:
             self.__graphic.motionDetect = False
             return (oldX, oldY)
 
-        if self.__graphic.eventDetect and not (coordX, coordY) in self.__cellsAlive:
-            game_of_life_engine.addCell(self.__cellsAlive, coordX, coordY)
-        elif self.__graphic.eventDetect:
-            game_of_life_engine.removeCell(self.__cellsAlive, coordX, coordY)
+        if self.__graphic.eventDetect and (coordX, coordY) in self.__cellsAlive:
+            if colors_size == 0:
+                game_of_life_supplement_engine.removeCell(self.__cellsAlive, coordX, coordY)
+                self.__graphic.eventDetect = False
+                return (coordX, coordY)
+
+            cell = self.__cellsAlive[(coordX, coordY)]
+            index = 0
+            try:
+                index = colors.index(cell.color)
+            except:
+                index = -1
+
+            if index != colors_size - 1:
+                cell.color = colors[index + 1]
+            else:
+                game_of_life_supplement_engine.removeCell(self.__cellsAlive, coordX, coordY)
+
+
+        elif self.__graphic.eventDetect and colors_size > 0:
+            game_of_life_supplement_engine.addCell(self.__cellsAlive, coordX, coordY, colors[0])
             
         self.__graphic.eventDetect = False
 
@@ -183,8 +204,8 @@ class GameOfLife:
         if (time.time() - self.__lastTickTime <= ticksPerSecond):
             return
             
-        game_of_life_engine.analyze(self.__cellsAlive)
-        game_of_life_engine.update(self.__cellsAlive)
+        game_of_life_supplement_engine.analyze(self.__cellsAlive, self.__rows, self.__columns)
+        game_of_life_supplement_engine.update(self.__cellsAlive)
         
         self.__lastTickTime = time.time()
 
@@ -199,6 +220,6 @@ class GameOfLife:
         if (time.time() - self.__lastFrameTime <= framesPerSecond):
             return
 
-        self.__graphic.render(list(self.__cellsAlive.keys()))
+        self.__graphic.render({k : v.color for k, v in self.__cellsAlive.items()})
 
         self.__lastFrameTime = time.time()

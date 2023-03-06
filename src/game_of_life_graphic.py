@@ -248,7 +248,7 @@ class GameOfLifeGraphic:
         self._initRandom()
         self._initStartButton()
         self._initSaveButton()
-        self.__initEvent()
+        self._initEvent()
 
 
 
@@ -275,7 +275,7 @@ class GameOfLifeGraphic:
 
 
 
-    def __initEvent(self) -> None:
+    def _initEvent(self) -> None:
         """
         Cette méthode initialise les évènements.
         """
