@@ -24,17 +24,17 @@ class GameOfLifeGraphic:
         self.__cellHeight = self.__height // self.__rows
         self.__root = tkinter.Tk()
         self.__canvas = tkinter.Canvas(self.__root)
-        self.__menuFrame = tkinter.Frame(self.__root)
-        self.__randomButton = tkinter.Button(self.__menuFrame)
-        self.__startButton = tkinter.Button(self.__menuFrame)
-        self.__stopButton = tkinter.Button(self.__menuFrame)
-        self.__resetButton = tkinter.Button(self.__menuFrame)
-        self.__saveButton = tkinter.Button(self.__menuFrame)
-        self.__importButton = tkinter.Button(self.__menuFrame)
+        self._menuFrame = tkinter.Frame(self.__root)
+        self.__randomButton = tkinter.Button(self._menuFrame)
+        self.__startButton = tkinter.Button(self._menuFrame)
+        self.__stopButton = tkinter.Button(self._menuFrame)
+        self.__resetButton = tkinter.Button(self._menuFrame)
+        self.__saveButton = tkinter.Button(self._menuFrame)
+        self.__importButton = tkinter.Button(self._menuFrame)
         self.__tpsRange = tkinter.IntVar()
         self.__randomRange = tkinter.IntVar()
-        self.__rowIndex = 0
-        self.__columnIndex = 0
+        self._rowIndex = 0
+        self._columnIndex = 0
         self.__font = "Times_New_Roman 12"
         self.__sprites = {}
         self.__mouseX = 0
@@ -42,7 +42,7 @@ class GameOfLifeGraphic:
 
 
 
-    def __initRoot(self) -> None:
+    def _initRoot(self) -> None:
         """
         Cette méthode initialise la racine de l'interface.
         """
@@ -52,7 +52,7 @@ class GameOfLifeGraphic:
 
 
 
-    def __initCanvas(self) -> None:
+    def _initCanvas(self) -> None:
         """
         Cette méthode initialise le canvas de l'interface
         """
@@ -75,30 +75,30 @@ class GameOfLifeGraphic:
 
 
 
-    def __initMenu(self) -> None:
+    def _initMenu(self) -> None:
         """
         Cette méthode initialise le menu de l'interface.
         """
-        self.__menuFrame.config(bg="black")
-        self.__menuFrame.grid(row=0, column=1)
+        self._menuFrame.config(bg="black")
+        self._menuFrame.grid(row=0, column=1)
 
-        label = tkinter.Label(self.__menuFrame, text="Game of Life", font="Courier 22 bold", fg="white", bg="black")
-        label.grid(row=self.__rowIndex, column=0, columnspan=100, padx=10, pady=10)
-        self.__rowIndex += 1
+        label = tkinter.Label(self._menuFrame, text="Game of Life", font="Courier 22 bold", fg="white", bg="black")
+        label.grid(row=self._rowIndex, column=0, columnspan=100, padx=10, pady=10)
+        self._rowIndex += 1
 
 
 
-    def __initTimeRange(self) -> None:
+    def _initTimeRange(self) -> None:
         """
         Cette méthode initialise le range du TPS.
         """
-        label = tkinter.Label(self.__menuFrame, text="Ticks per second", font=self.__font, fg="white", bg="black")
-        label.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=100, padx=10, pady=10)
-        self.__rowIndex += 1
+        label = tkinter.Label(self._menuFrame, text="Ticks per second", font=self.__font, fg="white", bg="black")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
+        self._rowIndex += 1
 
-        range = tkinter.Scale(self.__menuFrame, variable=self.__tpsRange, orient=tkinter.HORIZONTAL)
-        range.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=100, padx=10, pady=10)
-        self.__rowIndex += 1
+        range = tkinter.Scale(self._menuFrame, variable=self.__tpsRange, orient=tkinter.HORIZONTAL)
+        range.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
+        self._rowIndex += 1
 
 
 
@@ -112,22 +112,22 @@ class GameOfLifeGraphic:
 
 
 
-    def __initRandom(self) -> None:
+    def _initRandom(self) -> None:
         """
         Cette méthode initialise les bouttons de random.
         """
-        label = tkinter.Label(self.__menuFrame, text="Random", font=self.__font, fg="white", bg="black")
-        label.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=100, padx=10, pady=10)
-        self.__rowIndex += 1
+        label = tkinter.Label(self._menuFrame, text="Random", font=self.__font, fg="white", bg="black")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
+        self._rowIndex += 1
 
         self.__randomButton.config(text="Random", font=self.__font)
-        self.__randomButton.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=3, padx=10, pady=10)
-        self.__columnIndex += 2
+        self.__randomButton.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
+        self._columnIndex += 2
 
-        range = tkinter.Scale(self.__menuFrame, variable=self.__randomRange, orient=tkinter.HORIZONTAL)
-        range.grid(row=self.__rowIndex, column=self.__columnIndex, columnspan=4, padx=10, pady=10)
-        self.__columnIndex = 0
-        self.__rowIndex += 1
+        range = tkinter.Scale(self._menuFrame, variable=self.__randomRange, orient=tkinter.HORIZONTAL)
+        range.grid(row=self._rowIndex, column=self._columnIndex, columnspan=4, padx=10, pady=10)
+        self._columnIndex = 0
+        self._rowIndex += 1
 
 
 
@@ -151,21 +151,21 @@ class GameOfLifeGraphic:
 
 
 
-    def __initStartButton(self) -> None:
+    def _initStartButton(self) -> None:
         """
         Cette méthode initialise les boutons start, stop et reset.
         """
         self.__startButton.config(text="Start", font=self.__font)
-        self.__startButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
-        self.__columnIndex += 1
+        self.__startButton.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
 
         self.__stopButton.config(text="Stop", font=self.__font)
-        self.__stopButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
-        self.__columnIndex += 1
+        self.__stopButton.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
 
         self.__resetButton.config(text="Reset", font=self.__font)
-        self.__resetButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
-        self.__columnIndex += 1
+        self.__resetButton.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
 
 
 
@@ -199,7 +199,7 @@ class GameOfLifeGraphic:
 
 
 
-    def __initSaveButton(self) -> None:
+    def _initSaveButton(self) -> None:
         """
         Cette méthode initialise les boutons start, stop et reset.
 
@@ -207,11 +207,11 @@ class GameOfLifeGraphic:
         param : column - La colonne où ça commence.
         """
         self.__saveButton.config(text="Save", font=self.__font)
-        self.__saveButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
-        self.__columnIndex += 1
+        self.__saveButton.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
 
         self.__importButton.config(text="Import", font=self.__font)
-        self.__importButton.grid(row=self.__rowIndex, column=self.__columnIndex, padx=10, pady=10)
+        self.__importButton.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
 
 
 
@@ -239,13 +239,13 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise l'interface.
         """
-        self.__initRoot()
-        self.__initCanvas()
-        self.__initMenu()
-        self.__initTimeRange()
-        self.__initRandom()
-        self.__initStartButton()
-        self.__initSaveButton()
+        self._initRoot()
+        self._initCanvas()
+        self._initMenu()
+        self._initTimeRange()
+        self._initRandom()
+        self._initStartButton()
+        self._initSaveButton()
 
 
 
