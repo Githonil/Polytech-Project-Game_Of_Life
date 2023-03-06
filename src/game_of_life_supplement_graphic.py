@@ -42,9 +42,9 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         """
         Cette méthode initialise les boutons de couleur
         """
-        redButton = tkinter.Checkbutton(self._menuFrame, bg="red", width=3, command=lambda : self.updateColor("red"))
-        greenButton = tkinter.Checkbutton(self._menuFrame, bg="green", width=3, command=lambda : self.updateColor("green"))
-        blueButton = tkinter.Checkbutton(self._menuFrame, bg="blue", width=3, command=lambda : self.updateColor("blue"))
+        redButton = tkinter.Checkbutton(self._menuFrame, bg="red", width=3, command=lambda : self.__updateColor("red"))
+        greenButton = tkinter.Checkbutton(self._menuFrame, bg="green", width=3, command=lambda : self.__updateColor("green"))
+        blueButton = tkinter.Checkbutton(self._menuFrame, bg="blue", width=3, command=lambda : self.__updateColor("blue"))
         redButton.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 1
         greenButton.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
@@ -88,6 +88,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         self._initRandom()
         self._initStartButton()
         self._initSaveButton()
+        self._initEvent()
 
 
 
@@ -103,6 +104,8 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
 
             if not coord in self.__sprites:
                 self.__sprites[coord] = self.__canvas.create_rectangle(coordX, coordY, coordX + self.__cellWidth - 1, coordY + self.__cellHeight - 1, fill=coords[coord], outline="")
+            else:
+                self.__canvas.itemconfig(self.__sprites[coord], fill=coords[coord])
 
         spritesCopy = self.__sprites.copy()
         for sprite in spritesCopy:
