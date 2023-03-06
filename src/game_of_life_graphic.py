@@ -3,6 +3,7 @@ import game_of_life_supplement_engine
 import tkinter
 from tkinter import filedialog
 import pickle
+import random
 
 def initRoot() -> 'tkinter.Tk':
     """
@@ -98,7 +99,7 @@ def initMenuLifeRange(rootMenu : 'tkinter.Frame', lifeDuration : 'tkinter.IntVar
     
     
     
-def initMenuTPSRange(rootMenu : 'tkinter.Frame', timeDuration : 'tkinter.IntVar') -> None:
+def initMenuTPSRange(rootMenu : 'tkinter.Frame', timeDuration : 'tkinter.DoubleVar') -> None:
     """
     Cette fonction ajoute le temps entre chaque étapes au menu.
     
@@ -106,7 +107,7 @@ def initMenuTPSRange(rootMenu : 'tkinter.Frame', timeDuration : 'tkinter.IntVar'
     param : timeDuration - Le temps entre chaque étapes.
     """
     timeLabel = tkinter.Label(rootMenu, text="TPS")
-    timeRange = tkinter.Scale(rootMenu, from_=1, to_=180, length=100, variable=timeDuration, orient = tkinter.HORIZONTAL)
+    timeRange = tkinter.Scale(rootMenu, from_=0.01, to_=1.0, resolution=0.01, length=100, variable=timeDuration, orient = tkinter.HORIZONTAL)
     timeLabel.grid(row=2, column=0, columnspan=5, padx=10, pady=10)
     timeRange.grid(row=3, column=0, columnspan=5, padx=10, pady=10)
     
@@ -141,18 +142,41 @@ def initMenuColor(rootMenu : 'tkinter.Frame', colors : set) -> None:
     redButton.grid(row=4, column=0, columnspan=3, padx=10, pady=10)
     greenButton.grid(row=4, column=1, columnspan=3, padx=10, pady=10)
     blueButton.grid(row=4, column=2, columnspan=3, padx=10, pady=10)
+
+
+def randomCells(randomValue : int, cellsAlive : dict, rows : int, columns : int, colors : set):
+    """
+    """
+    if len(colors) == 0:
+        return
+    
+    numberCells = int((rows * columns - len(cellsAlive)) * (randomValue / 100))
+
+    for i in range(numberCells):
+        coordX = random.randint(0, columns)
+        coordY = random.randint(0, rows)
+
+        while (coordX, coordY) in cellsAlive:
+            coordX = random.randint(0, columns)
+            coordY = random.randint(0, rows)
+
+        color = random.choice(list(colors))
+
+        game_of_life_supplement_engine.addCell(cellsAlive, coordX, coordY, color)
     
     
     
-def initMenuRandom(rootMenu : 'tkinter.Frame', randomValue : 'tkinter.IntVar') -> None:
+    
+    
+def initMenuRandom(rootMenu : 'tkinter.Frame', randomValue : 'tkinter.IntVar', cellsAlive : dict, rows : int, columns : int, colors : set) -> None:
     """
     Cette fonction ajoute les boutons random au menu.
     
     param : rootMenu - La racine du menu.
     param : randomValue - La valeur du random.
     """
-    randomButton = tkinter.Button(rootMenu, text="random")
-    randomRange = tkinter.Scale(rootMenu, from_=1, to_=100, length=50, variable=randomValue, orient = tkinter.HORIZONTAL)
+    randomButton = tkinter.Button(rootMenu, text="random", command=lambda: randomCells(randomValue.get(), cellsAlive, rows, columns, colors))
+    randomRange = tkinter.Scale(rootMenu, from_=25, to_=100, length=50, variable=randomValue, orient = tkinter.HORIZONTAL)
     randomButton.grid(row=5, column=0, columnspan=3, padx=10, pady=10)
     randomRange.grid(row=5, column=2, columnspan=3, padx=10, pady=10)
 

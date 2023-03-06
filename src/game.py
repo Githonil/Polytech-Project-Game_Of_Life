@@ -27,7 +27,7 @@ class Game:
         self.__lastFrameTime = 0
         self.__runningLoop = True
         self.__root = game_of_life_graphic.initRoot()
-        self.__tps = tkinter.IntVar()
+        self.__tps = tkinter.DoubleVar()
         self.__random = tkinter.IntVar()
         self.__running = [False]
         self.__canvas = game_of_life_graphic.initCanvas(self.__root, width, height)
@@ -36,7 +36,7 @@ class Game:
         self.__menu = game_of_life_graphic.initMenuBase(self.__root)
         game_of_life_graphic.initMenuTPSRange(self.__menu, self.__tps) #TODO: Mettre à jour le graphic.
         game_of_life_graphic.initMenuColor(self.__menu, self.__colors)
-        game_of_life_graphic.initMenuRandom(self.__menu, self.__random)
+        game_of_life_graphic.initMenuRandom(self.__menu, self.__random, self.__cellsAlive, self.__rows, self.__columns, self.__colors)
         game_of_life_graphic.initMenuStartButtons(self.__menu, self.__running, self.__cellsAlive)
         game_of_life_graphic.initMenuSaveButtons(self.__menu, self.__cellsAlive) #TODO: Mettre à jour le graphic.
 
