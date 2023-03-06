@@ -211,6 +211,30 @@ class GameOfLife:
 
 
 
+    def __countColors(self) -> None:
+        """
+        Cette méthode compte les couleurs des cellules en vie.
+        """
+        countCellsRed = 0
+        countCellsGreen = 0
+        countCellsBlue = 0
+
+        for cellCoord in self.__cellsAlive:
+            cell = self.__cellsAlive[cellCoord]
+
+            if cell.color == "red":
+                countCellsRed += 1
+            elif cell.color == "green":
+                countCellsGreen += 1
+            elif cell.color == "blue":
+                countCellsBlue += 1
+
+        self.__graphic.countCellsRed.set(countCellsRed)
+        self.__graphic.countCellsGreen.set(countCellsGreen)
+        self.__graphic.countCellsBlue.set(countCellsBlue)
+
+
+
     def __framesUpdate(self, framesPerSecond : int) -> None:
         """
         Cette méthode met à jour les frames.
@@ -220,6 +244,7 @@ class GameOfLife:
         if (time.time() - self.__lastFrameTime <= framesPerSecond):
             return
 
+        self.__countColors()
         self.__graphic.render({k : v.color for k, v in self.__cellsAlive.items()})
 
         self.__lastFrameTime = time.time()

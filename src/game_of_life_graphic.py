@@ -10,7 +10,6 @@ class GameOfLifeGraphic:
     def __init__(self, width : int, height : int, columns : int, rows : int) -> 'GameOfLifeGraphic':
         """
         Le constructeur de l'interface graphique.
-
         param : width - La largeur de la zone de dessin.
         param : height - La hauteur de la zone de dessin.
         param : columns - Le nombre de colonnes dans la grille.
@@ -37,8 +36,11 @@ class GameOfLifeGraphic:
         self._columnIndex = 0
         self.__font = "Times_New_Roman 12"
         self.__sprites = {}
-        self.__mouseX = 0
-        self.__mouseY = 0
+        self.__mouseX = -1
+        self.__mouseY = -1
+        self.eventDetect = False #Cet attribut permet de dire si un évènement à eu lieu. à remettre à False si jamais.
+        self.motionDetect = False #Cet attribut permet de dire si un évènement à mouvement à eu lieu. à remettre à False si jamais.
+        self.countCells = tkinter.IntVar() #Cet attribut représente le nombre de cellules en vie.
 
 
 
@@ -105,7 +107,6 @@ class GameOfLifeGraphic:
     def getTimeRange(self) -> float:
         """
         Cette méthode renvoie le TPS.
-
         param : Renvoie le TPS.
         """
         return self.__tpsRange.get()
@@ -134,7 +135,6 @@ class GameOfLifeGraphic:
     def getRandomRange(self) -> int:
         """
         Cette méthode renvoie la valeur du random range.
-
         return : Renvoie la valeur du random range.
         """
         return self.__randomRange.get()
@@ -144,7 +144,6 @@ class GameOfLifeGraphic:
     def setRandomButton(self, func: 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton random.
-
         param : func - La nouvelle fonction.
         """
         self.__randomButton.config(command=func)
@@ -172,7 +171,6 @@ class GameOfLifeGraphic:
     def setStartButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton start.
-
         param : func - La nouvelle fonction.
         """
         self.__startButton.config(command=func)
@@ -182,7 +180,6 @@ class GameOfLifeGraphic:
     def setStopButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton stop.
-
         param : func - La nouvelle fonction.
         """
         self.__stopButton.config(command=func)
@@ -192,7 +189,6 @@ class GameOfLifeGraphic:
     def setResetButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton reset.
-
         param : func - La nouvelle fonction.
         """
         self.__resetButton.config(command=func)
@@ -202,7 +198,6 @@ class GameOfLifeGraphic:
     def _initSaveButton(self) -> None:
         """
         Cette méthode initialise les boutons start, stop et reset.
-
         param : row - La ligne où ça commence.
         param : column - La colonne où ça commence.
         """
@@ -221,7 +216,6 @@ class GameOfLifeGraphic:
     def setSaveButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton save.
-
         param : func - La nouvelle fonction.
         """
         self.__saveButton.config(command=func)
@@ -231,7 +225,6 @@ class GameOfLifeGraphic:
     def setImportButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton import.
-
         param : func - La nouvelle fonction.
         """
         self.__importButton.config(command=func)
@@ -261,16 +254,13 @@ class GameOfLifeGraphic:
 The rules are simple.
 On a grid of cells,
 cells will evolve with these rules:
-
 -A cell alone dies.
 -A cell with more than 3 neighbors die.
 -A cell with exactly 3 neighbors birth.
-
 To add a cell right click in the grid
 (a second click to remove).
 You can adjust the time with
 the Ticks per seconds scrollbar.
-
 Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
         )
         label.grid(row=0, column=0)
@@ -289,13 +279,14 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
         self._initRandom()
         self._initStartButton()
         self._initSaveButton()
+        self._initEvent()
+        self._countCells()
 
 
 
     def __binding(self, event : 'tkinter.Event') -> None:
         """
         Cette méthode agit sur le binding des évènements.
-
         param : Le registre des évènements.
         """
         self.__mouseX = (event.x - (event.x % self.__cellWidth))  // self.__cellWidth
@@ -307,7 +298,6 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
     def __bindingMotion(self, event : 'tkinter.Event') -> None:
         """
         Cette méthode agit sur le binding des évènements en mouvement.
-
         param : Le registre des évènements.
         """
         self.motionDetect = True
@@ -327,7 +317,6 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
     def getMouseX(self) -> int:
         """
         Cette méthode renvoie l'indice de la colonne de la dernière case clicker.
-
         return : Renvoie l'indice de la colonne de la dernière case clicker.
         """
         old = self.__mouseX
@@ -339,7 +328,6 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
     def getMouseY(self) -> int:
         """
         Cette méthode renvoie l'indice de la ligne de la dernière case clicker.
-
         return : Renvoie l'indice de la ligne de la dernière case clicker.
         """
         old = self.__mouseY
@@ -351,7 +339,6 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
     def initQuitButton(self, func : 'function') -> None:
         """
         Cette méthode met à jour le bouton fermer de l'interface graphique.
-
         param : func - La fonction.
         """
         self.__root.protocol("WM_DELETE_WINDOW", func=func)
@@ -361,7 +348,6 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
     def render(self, coords : list) -> None:
         """
         Cette méthode fait le rendu de l'interface graphique.
-
         param : coords - La liste des coordonnées d'une cellule. (coordX, coordY).
         """
         for coord in coords:
@@ -395,7 +381,6 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
     def save(obj : object) -> None:
         """
         Cette méthode statique permet d'avoir une fenêtre de sauvegarde d'un objet.
-
         param : obj - L'objet à sauvegarder.
         """
         file = filedialog.asksaveasfile(initialdir="./", mode="wb", defaultextension=".py", filetypes=[("Save file", ".save")])
@@ -412,7 +397,6 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
     def import_obj() -> object:
         """
         Cette méthode statique permet de charger un objet dans un fichier.
-
         return : Renvoie l'objet importer. Renvoie None, si l'action est annulée.
         """
         file = filedialog.askopenfile(initialdir="./", mode="rb", defaultextension=".py", filetypes=[("Save file", ".save")])

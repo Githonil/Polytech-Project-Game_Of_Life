@@ -191,6 +191,7 @@ class GameOfLife:
         if (time.time() - self.__lastFrameTime <= framesPerSecond):
             return
 
+        self.__graphic.countCells.set(len(self.__cellsAlive))
         self.__graphic.render(list(self.__cellsAlive.keys()))
 
         self.__lastFrameTime = time.time()

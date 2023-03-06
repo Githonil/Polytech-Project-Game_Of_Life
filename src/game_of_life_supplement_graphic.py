@@ -12,7 +12,6 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
     def __init__(self, width : int, height : int, columns : int, rows : int) -> 'GameOfLifeGraphic':
         """
         Le constructeur de l'interface graphique.
-
         param : width - La largeur de la zone de dessin.
         param : height - La hauteur de la zone de dessin.
         param : columns - Le nombre de colonnes dans la grille.
@@ -31,7 +30,6 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         Cette méthode met à jour une couleur.
         Si la couleur est activé alors elle se désactive.
         Si la couleur est désactivé alors elle s'active.
-
         param : color - La couleur à mettre à jour.
         """
         if color in self.__colorsSet:
@@ -62,7 +60,6 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
     def colorsSet(self) -> set:
         """
         Cette méthode renvoie le set des couleurs active.
-
         return : Renvoie le set des couleurs active.
         """
         return self.__colorsSet
@@ -123,18 +120,15 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
 The rules are simple.
 On a grid of cells,
 cells will evolve with these rules:
-
 -A cell alone dies.
 -A cell with more than 3 neighbors die.
 -A cell with exactly 3 neighbors birth.
-
 To add a cell, chose one or many colors
 and right click in the grid
 (to remove continue to right click
 until the cell is erased).
 You can adjust the time with
 the Ticks per seconds scrollbar.
-
 Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
         )
         label.grid(row=0, column=0)
@@ -154,13 +148,14 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
         self._initRandom()
         self._initStartButton()
         self._initSaveButton()
+        self._initEvent()
+        self._countCells()
 
 
 
     def render(self, coords : dict) -> None:
         """
         Cette méthode fait le rendu de l'interface graphique.
-
         param : coords - La map où se trouve les cellules et leur couleur (clef : (coordX, coordY), value : color:str).
         """
         for coord in coords.keys():
@@ -180,4 +175,3 @@ Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
                 del self.__sprites[sprite]
 
         self.__canvas.update()
-            
