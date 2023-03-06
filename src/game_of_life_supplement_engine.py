@@ -6,6 +6,7 @@ class Cell(game_of_life_engine.Cell):
 
     Ajout:
     -Les cellules ont des couleurs.
+    -Les cellules ont différentes couleurs lorsque qu'elles vieillissent.
     """
     
     def __init__(self, life : bool, color : str) -> None:
@@ -18,13 +19,67 @@ class Cell(game_of_life_engine.Cell):
         super().__init__(life)
         self.color = color
         self.__lifeduration = 4
-    
+        self.__countColors = {}
 
+
+
+    def analyze(self, neighbors : list) -> None:
+        """
+        Cette méthode analyse le voisinage d'une cellule.
+
+        param : Les voisines de la cellule, il doit en avoir exactement huit !
+        """
+        if len(neighbors) != 8:
+            raise ValueError("The cell needs eight neighbors.")
+
+        self.__neighbors = 0
+
+        for cell in neighbors:
+            if not isinstance(cell, Cell):
+                raise ValueError("One of the cells is not a cell.")
+            
+            color = self.color
+            
+            if cell.__life == True:
+                if cell.color == self.color:
+                    self.__neighbors += 1
+            else:
+                if not color in cell.__countColors:
+                    cell.__countColors[color] = 0
+                cell.__countColors[color] += 1
+
+                cell.__neighbors += 1
+
+
+
+    def __colorMax(self) -> str:
+        """
+        Cette méthode renvoie la couleur la plus répandue.
+
+        return : Renvoie la couleur la plus répandue.
+        """
+        import random
+        maxInt = -float('inf')
+        maxString = ""
+        for colorName in self.__countColors.keys():
+
+            if self.__countColors[colorName] > maxInt:
+                maxInt = self.__countColors[colorName]
+                maxString = colorName
+            elif self.__countColors[colorName] == maxInt:
+                maxString = random.choice([maxString, colorName])
+
+        return maxString
+        
+            
 
     def update(self) -> None:
         """
         Cette méthode met à jour la cellule.
         """
+        if self.__life == False:
+            self.color = self.__colorMax()
+
         super().update()
         
         if self.__lifeduration > 0:
@@ -84,7 +139,6 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
     param : rows - Le nombre de lignes de la grille.
     param : columns - Le nombre de colonnes de la grille.
     """
-    #TODO: Voir l'implémentation des naissances.
     cellsAliveCopy = cellsAlive.copy()
     for cellCoord in cellsAliveCopy:
         
@@ -103,7 +157,7 @@ def analyze(cellsAlive : dict, rows : int, columns : int) -> None:
                 coordY = adjustBorder(coordY, rows)
 
                 if not (coordX, coordY) in cellsAlive:
-                    cellsAlive[(coordX, coordY)] = Cell(False, cellsAlive[(cellCoord[0], cellCoord[1])].color)
+                    cellsAlive[(coordX, coordY)] = Cell(False, "None")
 
                 neighbors.append(cellsAlive[(coordX, coordY)])
 
