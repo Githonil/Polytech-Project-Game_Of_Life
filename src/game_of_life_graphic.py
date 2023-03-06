@@ -41,6 +41,7 @@ class GameOfLifeGraphic:
         self.__mouseY = -1
         self.eventDetect = False #Cet attribut permet de dire si un évènement à eu lieu. à remettre à False si jamais.
         self.motionDetect = False #Cet attribut permet de dire si un évènement à mouvement à eu lieu. à remettre à False si jamais.
+        self.countCells = tkinter.IntVar() #Cet attribut représente le nombre de cellules en vie.
 
 
 
@@ -59,7 +60,7 @@ class GameOfLifeGraphic:
         Cette méthode initialise le canvas de l'interface
         """
         self.__canvas.config(width=self.__width, height=self.__height, bg="white", highlightthickness=0)
-        self.__canvas.grid(row=0, column=0)
+        self.__canvas.grid(row=0, column=1)
 
         self.__initRender()
 
@@ -82,7 +83,7 @@ class GameOfLifeGraphic:
         Cette méthode initialise le menu de l'interface.
         """
         self._menuFrame.config(bg="black")
-        self._menuFrame.grid(row=0, column=1)
+        self._menuFrame.grid(row=0, column=2)
 
         label = tkinter.Label(self._menuFrame, text="Game of Life", font="Courier 22 bold", fg="white", bg="black")
         label.grid(row=self._rowIndex, column=0, columnspan=100, padx=10, pady=10)
@@ -214,6 +215,9 @@ class GameOfLifeGraphic:
 
         self.__importButton.config(text="Import", font=self.__font)
         self.__importButton.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        
+        self._columnIndex = 0
+        self._rowIndex += 1
 
 
 
@@ -237,11 +241,51 @@ class GameOfLifeGraphic:
 
 
 
+    def _countCells(self) -> None:
+        """
+        Cette méthode ajoute le conteur de cellules en vie.
+        """
+        label = tkinter.Label(self._menuFrame, text="cells alive : ", font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
+
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCells, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+
+        self._columnIndex = 0
+        self._rowIndex += 1
+
+
+    def _text(self) -> None:
+        """
+        Cette méthode ajoute le texte explicatif.
+        """
+        label = tkinter.Label(text="""Hello and welcome to the game of life.
+The rules are simple.
+On a grid of cells,
+cells will evolve with these rules:
+
+-A cell alone dies.
+-A cell with more than 3 neighbors die.
+-A cell with exactly 3 neighbors birth.
+
+To add a cell right click in the grid
+(a second click to remove).
+You can adjust the time with
+the Ticks per seconds scrollbar.
+
+Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
+        )
+        label.grid(row=0, column=0)
+
+
+
     def init(self) -> None:
         """
         Cette méthode initialise l'interface.
         """
         self._initRoot()
+        self._text()
         self._initCanvas()
         self._initMenu()
         self._initTimeRange()
@@ -249,6 +293,7 @@ class GameOfLifeGraphic:
         self._initStartButton()
         self._initSaveButton()
         self._initEvent()
+        self._countCells()
 
 
 

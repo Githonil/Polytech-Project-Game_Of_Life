@@ -20,6 +20,9 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         """
         super().__init__(width, height, columns, rows)
         self.__colorsSet = set()
+        self.countCellsRed = tkinter.IntVar() #Cet attribut représente le nombres des cellules rouges en vie.
+        self.countCellsGreen = tkinter.IntVar() #Cet attribut représente le nombres des cellules verts en vie.
+        self.countCellsBlue = tkinter.IntVar() #Cet attribut représente le nombres des cellules bleues en vie.
 
 
 
@@ -73,6 +76,68 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         raise : PermissionError - Si vous tentez de modifier l'attribut.
         """
         raise PermissionError("You don't have the acces to change this attribute.")
+    
+
+
+    def _countCells(self) -> None:
+        """
+        Cette méthode ajoute le conteur de cellules en vie.
+        """
+        label = tkinter.Label(self._menuFrame, text="cells red alive : ", font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
+
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsRed, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+
+        self._columnIndex = 0
+        self._rowIndex += 1
+
+        label = tkinter.Label(self._menuFrame, text="cells green alive : ", font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
+
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsGreen, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+
+        self._columnIndex = 0
+        self._rowIndex += 1
+
+        label = tkinter.Label(self._menuFrame, text="cells blue alive : ", font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        self._columnIndex += 1
+
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsBlue, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+
+        self._columnIndex = 0
+        self._rowIndex += 1
+    
+
+
+    def _text(self) -> None:
+        """
+        Cette méthode ajoute le texte explicatif.
+        """
+        label = tkinter.Label(text="""Hello and welcome to the game of life.
+The rules are simple.
+On a grid of cells,
+cells will evolve with these rules:
+
+-A cell alone dies.
+-A cell with more than 3 neighbors die.
+-A cell with exactly 3 neighbors birth.
+
+To add a cell, chose one or many colors
+and right click in the grid
+(to remove continue to right click
+until the cell is erased).
+You can adjust the time with
+the Ticks per seconds scrollbar.
+
+Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
+        )
+        label.grid(row=0, column=0)
 
 
 
@@ -81,6 +146,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         Cette méthode initialise l'interface.
         """
         self._initRoot()
+        self._text()
         self._initCanvas()
         self._initMenu()
         self._initTimeRange()
@@ -89,6 +155,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         self._initStartButton()
         self._initSaveButton()
         self._initEvent()
+        self._countCells()
 
 
 
