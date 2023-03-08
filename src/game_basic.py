@@ -89,7 +89,9 @@ class GameOfLife:
         """
         Cette méthode initialse le bouton import.
         """
-        self.__cellsAlive = game_of_life_graphic.GameOfLifeGraphic.import_obj()
+        obj = game_of_life_graphic.GameOfLifeGraphic.import_obj()
+        if obj != None:
+            self.__cellsAlive = obj.copy()
 
 
     def __init(self) -> None:
