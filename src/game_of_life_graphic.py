@@ -95,7 +95,9 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise le range du TPS.
         """
-        label = tkinter.Label(self._menuFrame, text="Ticks per second", font=self.__font, fg="white", bg="black")
+        textFR = "Actions par seconde"
+        textEN = "Ticks per second"
+        label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, fg="white", bg="black")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
 
@@ -119,7 +121,9 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise les bouttons de random.
         """
-        label = tkinter.Label(self._menuFrame, text="Random (in %)", font=self.__font, fg="white", bg="black")
+        textFR = "Random (en %)"
+        textEN = "Random (in %)"
+        label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, fg="white", bg="black")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
 
@@ -245,12 +249,14 @@ class GameOfLifeGraphic:
         """
         Cette méthode ajoute le conteur de cellules en vie.
         """
-        label = tkinter.Label(self._menuFrame, text="cells alive : ", font=self.__font, bg="black", fg="white")
-        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
-        self._columnIndex += 1
+        textFR = "cellules en vie : "
+        textEN = "cells alive : "
+        label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
+        self._columnIndex += 3
 
         label = tkinter.Label(self._menuFrame, textvariable=self.countCells, font=self.__font, bg="black", fg="white")
-        label.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
@@ -260,21 +266,38 @@ class GameOfLifeGraphic:
         """
         Cette méthode ajoute le texte explicatif.
         """
-        label = tkinter.Label(text="""Hello and welcome to the game of life.
+        textFR = """Bonjour et bienvenue dans le jeu de la vie.
+Les règles sont simples.
+Sur une grille de case,
+des cellules vont évoluer avec ces régles:
+-Une cellule seule meurt.
+-Une cellule avec plus de 3 voisines meurt.
+-Une case avec exactement 3 voisines naît.
+
+Pour ajouter une cellule, faire un clique droit sur la grille
+(Un second click pour retirer).
+Vous pouvez régler le temps avec
+la barre Actions par seconde.
+
+Bon jeu !"""
+
+        textEN = """Hello and welcome to the game of life.
 The rules are simple.
 On a grid of cells,
 cells will evolve with these rules:
 
 -A cell alone dies.
--A cell with more than 3 neighbors die.
--A cell with exactly 3 neighbors birth.
+-A cell with more than 3 neighbors dies.
+-A cell with exactly 3 neighbors births.
 
 To add a cell right click in the grid
 (a second click to remove).
 You can adjust the time with
 the Ticks per seconds scrollbar.
 
-Good game !""", font="Times_New_Roman 12", bg="black", fg="white"
+Good game !"""
+
+        label = tkinter.Label(text=textFR, font="Times_New_Roman 12", bg="black", fg="white"
         )
         label.grid(row=0, column=0)
 
