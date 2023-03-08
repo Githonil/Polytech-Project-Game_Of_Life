@@ -131,6 +131,9 @@ des cellules vont évoluer avec ces régles:
 (La couleur dominante l'emporte,
 aléatoire dans le cas de l'égalité).
 
+Les cellules vieillissent,
+au plus claire au plus foncée.
+
 Pour ajouter une cellule, choissisez une ou plusieurs couleurs.
 et de faire un clique droit sur la grille
 (Pour retirer, continuez de cliquer
@@ -150,6 +153,9 @@ cells will evolve with these rules:
 -A cell with exactly 3 neighbors births.
 (The dominant color win,
 random if equality).
+
+The cells grow up,
+from lightest to darknest.
 
 To add a cell, chose one or many colors
 and right click in the grid
