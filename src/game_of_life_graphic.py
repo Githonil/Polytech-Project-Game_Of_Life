@@ -31,7 +31,7 @@ class GameOfLifeGraphic:
         self.__resetButton = tkinter.Button(self._menuFrame)
         self.__saveButton = tkinter.Button(self._menuFrame)
         self.__importButton = tkinter.Button(self._menuFrame)
-        self.__tpsRange = tkinter.IntVar()
+        self.__tpsRange = tkinter.DoubleVar()
         self.__randomRange = tkinter.IntVar()
         self._rowIndex = 0
         self._columnIndex = 0
