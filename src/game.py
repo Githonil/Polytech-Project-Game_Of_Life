@@ -99,6 +99,22 @@ class GameOfLife:
         """
         obj = game_of_life_supplement_graphic.GameOfLifeGraphic.import_obj()
         if obj != None:
+            if not isinstance(obj, dict):
+                return
+            for cellCoord in obj:
+                cell = obj[cellCoord]
+                if not isinstance(cell, game_of_life_supplement_engine.Cell):
+                    return
+                
+                try:
+                    cell.color
+                except:
+                    cell.color = "red"
+                try:
+                    cell.lifeDuration
+                except:
+                    cell.lifeDuration = 1
+
             self.__cellsAlive = obj.copy()
 
 
