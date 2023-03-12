@@ -17,8 +17,8 @@ class Cell(game_of_life_engine.Cell):
         param : color - Le nom de la couleur en anglais, ou en hexadécimal ex: #ff00ff.
         """
         super().__init__(life)
-        self.color = color
-        self.__lifeduration = 4
+        self.color = color #Cet attribut représente la couleur de la cellule.
+        self.lifeDuration = 1 #Cet attribut représente le temps depuis que la cellule est née. ça commence par 1.
         self.__countColors = {}
 
 
@@ -82,8 +82,7 @@ class Cell(game_of_life_engine.Cell):
 
         super().update()
         
-        if self.__lifeduration > 0:
-            self.__lifeduration -= 1
+        self.lifeDuration += 1
 
 
 
