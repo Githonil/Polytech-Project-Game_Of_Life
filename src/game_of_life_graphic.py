@@ -404,7 +404,7 @@ Good game !"""
         Cette méthode statique permet d'avoir une fenêtre de sauvegarde d'un objet.
         param : obj - L'objet à sauvegarder.
         """
-        file = filedialog.asksaveasfile(initialdir="./", mode="wb", defaultextension=".py", filetypes=[("Save file", ".save")])
+        file = filedialog.asksaveasfile(initialdir="./", mode="wb", defaultextension=".py", filetypes=[("Save file", ".save"), ("All files", "*")])
 
         if file == None:
             return
@@ -420,7 +420,7 @@ Good game !"""
         Cette méthode statique permet de charger un objet dans un fichier.
         return : Renvoie l'objet importer. Renvoie None, si l'action est annulée.
         """
-        file = filedialog.askopenfile(initialdir="./", mode="rb", defaultextension=".py", filetypes=[("Save file", ".save")])
+        file = filedialog.askopenfile(initialdir="./", mode="rb", defaultextension=".py", filetypes=[("Save file", ".save"), ("All files", "*")])
 
         if file == None:
             return
