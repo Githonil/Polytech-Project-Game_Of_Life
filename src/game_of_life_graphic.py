@@ -30,7 +30,7 @@ class GameOfLifeGraphic:
         self.__resetButton = tkinter.Button(self._menuFrame)
         self.__saveButton = tkinter.Button(self._menuFrame)
         self.__importButton = tkinter.Button(self._menuFrame)
-        self.__tpsRange = tkinter.IntVar()
+        self.__tpsRange = tkinter.DoubleVar()
         self.__randomRange = tkinter.IntVar()
         self._rowIndex = 0
         self._columnIndex = 0
@@ -100,7 +100,7 @@ class GameOfLifeGraphic:
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
 
-        range = tkinter.Scale(self._menuFrame, from_=0.01, to_=2.0, resolution=0.01, variable=self.__tpsRange, orient=tkinter.HORIZONTAL)
+        range = tkinter.Scale(self._menuFrame, from_=0.1, to_=2.0, resolution=0.1, variable=self.__tpsRange, orient=tkinter.HORIZONTAL)
         range.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
 

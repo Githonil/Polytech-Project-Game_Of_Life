@@ -190,10 +190,10 @@ class GameOfLife:
 
             oldX, oldY = self.__event(oldX, oldY)
 
-            self.__framesUpdate(1/60)
-
             if self.__running:
                 self.__ticksUpdate(self.__graphic.getTimeRange())
+
+            self.__framesUpdate(1/60)
 
 
 
@@ -237,6 +237,80 @@ class GameOfLife:
 
 
 
+    def __adjustNumber(self, string : str) -> str:
+        """
+        Si string a un seul caractère. Alors il double le caractère pour en avoir deux.
+
+        param : string - La chaîne de caractères à tester.
+        return : Renvoie la nouvelle chaîne de caractères;
+        """
+        if len(string) < 2:
+            string = 2 * string
+
+        return string
+
+
+
+    def __createDictColors(self) -> dict:
+        """
+        Cette méthode crée un dictionnaire clef : (coordX, coordY) ; valeur : couleur (str).
+
+        Return : Renvoie un dictionnaire clef : (coordX, coordY) ; valeur : couleur (str).
+        """
+        dict = {}
+        MAXCOLORS = 5
+
+        for cellCoord in self.__cellsAlive:
+            cell = self.__cellsAlive[cellCoord]
+
+            coeff = (cell.lifeDuration + 20) // 20
+
+            if coeff > MAXCOLORS:
+                coeff = MAXCOLORS
+
+            coeff = (1 / (MAXCOLORS - 1)) * (coeff - 1) + 1
+
+            color = cell.color
+
+            if color == "red":
+                red = hex(round(15 / coeff))[2:]
+                green = hex(round(8 / coeff))[2:]
+                blue = hex(round(8 / coeff))[2:]
+
+                red = self.__adjustNumber(red)
+                green = self.__adjustNumber(green)
+                blue = self.__adjustNumber(blue)
+
+                color = '#' + red + green + blue
+
+            elif color == "green":
+                red = hex(round(8 / coeff))[2:]
+                green = hex(round(15 / coeff))[2:]
+                blue = hex(round(8 / coeff))[2:]
+
+                red = self.__adjustNumber(red)
+                green = self.__adjustNumber(green)
+                blue = self.__adjustNumber(blue)
+
+                color = '#' + red + green + blue
+
+            elif color == "blue":
+                red = hex(round(8 / coeff))[2:]
+                green = hex(round(8 / coeff))[2:]
+                blue = hex(round(15 / coeff))[2:]
+
+                red = self.__adjustNumber(red)
+                green = self.__adjustNumber(green)
+                blue = self.__adjustNumber(blue)
+
+                color = '#' + red + green + blue
+
+            dict[cellCoord] = color
+
+        return dict
+
+
+
     def __framesUpdate(self, framesPerSecond : int) -> None:
         """
         Cette méthode met à jour les frames.
@@ -247,6 +321,6 @@ class GameOfLife:
             return
 
         self.__countColors()
-        self.__graphic.render({k : v.color for k, v in self.__cellsAlive.items()})
+        self.__graphic.render(self.__createDictColors())
 
         self.__lastFrameTime = time.time()
