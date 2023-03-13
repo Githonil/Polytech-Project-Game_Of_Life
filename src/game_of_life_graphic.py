@@ -10,7 +10,6 @@ class GameOfLifeGraphic:
     def __init__(self, width : int, height : int, columns : int, rows : int) -> 'GameOfLifeGraphic':
         """
         Le constructeur de l'interface graphique.
-
         param : width - La largeur de la zone de dessin.
         param : height - La hauteur de la zone de dessin.
         param : columns - Le nombre de colonnes dans la grille.
@@ -42,6 +41,7 @@ class GameOfLifeGraphic:
         self.eventDetect = False #Cet attribut permet de dire si un évènement à eu lieu. à remettre à False si jamais.
         self.motionDetect = False #Cet attribut permet de dire si un évènement à mouvement à eu lieu. à remettre à False si jamais.
         self.countCells = tkinter.IntVar() #Cet attribut représente le nombre de cellules en vie.
+        self.countStage = tkinter.IntVar() #Cet attribut représente le nombre de l'étape en cours.
 
 
 
@@ -110,7 +110,6 @@ class GameOfLifeGraphic:
     def getTimeRange(self) -> float:
         """
         Cette méthode renvoie le TPS.
-
         param : Renvoie le TPS.
         """
         return self.__tpsRange.get()
@@ -141,7 +140,6 @@ class GameOfLifeGraphic:
     def getRandomRange(self) -> int:
         """
         Cette méthode renvoie la valeur du random range.
-
         return : Renvoie la valeur du random range.
         """
         return self.__randomRange.get()
@@ -151,7 +149,6 @@ class GameOfLifeGraphic:
     def setRandomButton(self, func: 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton random.
-
         param : func - La nouvelle fonction.
         """
         self.__randomButton.config(command=func)
@@ -179,7 +176,6 @@ class GameOfLifeGraphic:
     def setStartButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton start.
-
         param : func - La nouvelle fonction.
         """
         self.__startButton.config(command=func)
@@ -189,7 +185,6 @@ class GameOfLifeGraphic:
     def setStopButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton stop.
-
         param : func - La nouvelle fonction.
         """
         self.__stopButton.config(command=func)
@@ -199,7 +194,6 @@ class GameOfLifeGraphic:
     def setResetButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton reset.
-
         param : func - La nouvelle fonction.
         """
         self.__resetButton.config(command=func)
@@ -209,7 +203,6 @@ class GameOfLifeGraphic:
     def _initSaveButton(self) -> None:
         """
         Cette méthode initialise les boutons start, stop et reset.
-
         param : row - La ligne où ça commence.
         param : column - La colonne où ça commence.
         """
@@ -228,7 +221,6 @@ class GameOfLifeGraphic:
     def setSaveButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton save.
-
         param : func - La nouvelle fonction.
         """
         self.__saveButton.config(command=func)
@@ -238,7 +230,6 @@ class GameOfLifeGraphic:
     def setImportButton(self, func : 'function') -> None:
         """
         Cette méthode modifie la fonction du bouton import.
-
         param : func - La nouvelle fonction.
         """
         self.__importButton.config(command=func)
@@ -249,9 +240,19 @@ class GameOfLifeGraphic:
         """
         Cette méthode ajoute le conteur de cellules en vie.
         """
-        textFR = "cellules en vie : "
-        textEN = "cells alive : "
-        label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, bg="black", fg="white")
+        textFR = ["Nombre de l'étape : ", "cellules en vie : "]
+        textEN = ["Number of the stage : ", "cells alive : "]
+        label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
+        self._columnIndex += 3
+
+        label = tkinter.Label(self._menuFrame, textvariable=self.countStage, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
+
+        self._columnIndex = 0
+        self._rowIndex += 1
+
+        label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
@@ -273,28 +274,23 @@ des cellules vont évoluer avec ces régles:
 -Une cellule seule meurt.
 -Une cellule avec plus de 3 voisines meurt.
 -Une case avec exactement 3 voisines naît.
-
 Pour ajouter une cellule, faire un clique droit sur la grille
 (Un second click pour retirer).
 Vous pouvez régler le temps avec
 la barre Actions par seconde.
-
 Bon jeu !"""
 
         textEN = """Hello and welcome to the game of life.
 The rules are simple.
 On a grid of cells,
 cells will evolve with these rules:
-
 -A cell alone dies.
 -A cell with more than 3 neighbors dies.
 -A cell with exactly 3 neighbors births.
-
 To add a cell right click in the grid
 (a second click to remove).
 You can adjust the time with
 the Ticks per seconds scrollbar.
-
 Good game !"""
 
         label = tkinter.Label(text=textFR, font="Times_New_Roman 12", bg="black", fg="white"
@@ -323,7 +319,6 @@ Good game !"""
     def __binding(self, event : 'tkinter.Event') -> None:
         """
         Cette méthode agit sur le binding des évènements.
-
         param : Le registre des évènements.
         """
         self.__mouseX = (event.x - (event.x % self.__cellWidth))  // self.__cellWidth
@@ -335,7 +330,6 @@ Good game !"""
     def __bindingMotion(self, event : 'tkinter.Event') -> None:
         """
         Cette méthode agit sur le binding des évènements en mouvement.
-
         param : Le registre des évènements.
         """
         self.motionDetect = True
@@ -355,7 +349,6 @@ Good game !"""
     def getMouseX(self) -> int:
         """
         Cette méthode renvoie l'indice de la colonne de la dernière case clicker.
-
         return : Renvoie l'indice de la colonne de la dernière case clicker.
         """
         old = self.__mouseX
@@ -367,7 +360,6 @@ Good game !"""
     def getMouseY(self) -> int:
         """
         Cette méthode renvoie l'indice de la ligne de la dernière case clicker.
-
         return : Renvoie l'indice de la ligne de la dernière case clicker.
         """
         old = self.__mouseY
@@ -379,7 +371,6 @@ Good game !"""
     def initQuitButton(self, func : 'function') -> None:
         """
         Cette méthode met à jour le bouton fermer de l'interface graphique.
-
         param : func - La fonction.
         """
         self.__root.protocol("WM_DELETE_WINDOW", func=func)
@@ -389,7 +380,6 @@ Good game !"""
     def render(self, coords : list) -> None:
         """
         Cette méthode fait le rendu de l'interface graphique.
-
         param : coords - La liste des coordonnées d'une cellule. (coordX, coordY).
         """
         for coord in coords:
@@ -423,7 +413,6 @@ Good game !"""
     def save(obj : object) -> None:
         """
         Cette méthode statique permet d'avoir une fenêtre de sauvegarde d'un objet.
-
         param : obj - L'objet à sauvegarder.
         """
         file = filedialog.asksaveasfile(initialdir="./", mode="wb", defaultextension=".py", filetypes=[("Save file", ".save"), ("All files", "*")])
@@ -440,7 +429,6 @@ Good game !"""
     def import_obj() -> object:
         """
         Cette méthode statique permet de charger un objet dans un fichier.
-
         return : Renvoie l'objet importer. Renvoie None, si l'action est annulée.
         """
         file = filedialog.askopenfile(initialdir="./", mode="rb", defaultextension=".py", filetypes=[("Save file", ".save"), ("All files", "*")])
