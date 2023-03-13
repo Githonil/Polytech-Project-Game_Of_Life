@@ -103,7 +103,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[1], font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR[2], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
@@ -113,7 +113,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[2], font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR[3], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
