@@ -12,7 +12,6 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
     def __init__(self, width : int, height : int, columns : int, rows : int) -> 'GameOfLifeGraphic':
         """
         Le constructeur de l'interface graphique.
-
         param : width - La largeur de la zone de dessin.
         param : height - La hauteur de la zone de dessin.
         param : columns - Le nombre de colonnes dans la grille.
@@ -23,6 +22,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         self.countCellsRed = tkinter.IntVar() #Cet attribut représente le nombres des cellules rouges en vie.
         self.countCellsGreen = tkinter.IntVar() #Cet attribut représente le nombres des cellules verts en vie.
         self.countCellsBlue = tkinter.IntVar() #Cet attribut représente le nombres des cellules bleues en vie.
+        self.countStage = tkinter.IntVar() #Cet attribut représente le nombre de l'étape en cours.
 
 
 
@@ -31,7 +31,6 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         Cette méthode met à jour une couleur.
         Si la couleur est activé alors elle se désactive.
         Si la couleur est désactivé alors elle s'active.
-
         param : color - La couleur à mettre à jour.
         """
         if color in self.__colorsSet:
@@ -62,7 +61,6 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
     def colorsSet(self) -> set:
         """
         Cette méthode renvoie le set des couleurs active.
-
         return : Renvoie le set des couleurs active.
         """
         return self.__colorsSet
@@ -83,13 +81,13 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         """
         Cette méthode ajoute le conteur de cellules en vie.
         """
-        textFR = ["cellules rouges en vie : ", "cellules vertes en vie : ", "cellules bleues en vie : "]
-        textEN = ["cells red alive : ", "cells green alive : ", "cells blue alive : "]
+        textFR = ["Nombre de l'étape : ", "cellules rouges en vie : ", "cellules vertes en vie : ", "cellules bleues en vie : "]
+        textEN = ["Number of the stage : ", "cells red alive : ", "cells green alive : ", "cells blue alive : "]
         label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsRed, font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countStage, font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
@@ -99,13 +97,23 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsGreen, font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsRed, font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
 
         label = tkinter.Label(self._menuFrame, text=textFR[2], font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
+        self._columnIndex += 3
+
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsGreen, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
+
+        self._columnIndex = 0
+        self._rowIndex += 1
+
+        label = tkinter.Label(self._menuFrame, text=textFR[3], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
@@ -130,40 +138,33 @@ des cellules vont évoluer avec ces régles:
 -Une case avec exactement 3 voisines naît.
 (La couleur dominante l'emporte,
 aléatoire dans le cas de l'égalité).
-
 Les cellules vieillissent,
 au plus claire au plus foncée.
-
 Pour ajouter une cellule, choissisez une ou plusieurs couleurs.
 et de faire un clique droit sur la grille
 (Pour retirer, continuez de cliquer
 jusqu'à ce que la cellule soit effacée).
 Vous pouvez régler le temps avec
 la barre Actions par seconde.
-
 Bon jeu !"""
 
         textEN = """Hello and welcome to the game of life.
 The rules are simple.
 On a grid of cells,
 cells will evolve with these rules:
-
 -A cell alone dies.
 -A cell with more than 3 neighbors dies.
 -A cell with exactly 3 neighbors births.
 (The dominant color win,
 random if equality).
-
 The cells grow up,
 from lightest to darknest.
-
 To add a cell, chose one or many colors
 and right click in the grid
 (to remove continue to right click
 until the cell is erased).
 You can adjust the time with
 the Ticks per seconds scrollbar.
-
 Good game !"""
 
         label = tkinter.Label(text=textFR, font="Times_New_Roman 12", bg="black", fg="white"
@@ -193,7 +194,6 @@ Good game !"""
     def render(self, coords : dict) -> None:
         """
         Cette méthode fait le rendu de l'interface graphique.
-
         param : coords - La map où se trouve les cellules et leur couleur (clef : (coordX, coordY), value : color:str).
         """
         for coord in coords.keys():
@@ -213,4 +213,3 @@ Good game !"""
                 del self.__sprites[sprite]
 
         self.__canvas.update()
-            
