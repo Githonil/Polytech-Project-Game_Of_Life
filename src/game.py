@@ -30,6 +30,7 @@ class GameOfLife:
         self.__mainLoop = True
         self.__lastTickTime = time.time()
         self.__lastFrameTime = time.time()
+        self.__countStage = 0
 
 
 
@@ -82,6 +83,7 @@ class GameOfLife:
         """
         self.__running = False
         self.__cellsAlive.clear()
+        self.__countStage = 0
 
 
 
@@ -224,6 +226,7 @@ class GameOfLife:
             
         game_of_life_supplement_engine.analyze(self.__cellsAlive, self.__rows, self.__columns)
         game_of_life_supplement_engine.update(self.__cellsAlive)
+        self.__countStage += 1
         
         self.__lastTickTime = time.time()
 
@@ -250,6 +253,7 @@ class GameOfLife:
         self.__graphic.countCellsRed.set(countCellsRed)
         self.__graphic.countCellsGreen.set(countCellsGreen)
         self.__graphic.countCellsBlue.set(countCellsBlue)
+        self.__graphic.countStage.set(self.__countStage)
 
 
 

@@ -41,6 +41,7 @@ class GameOfLifeGraphic:
         self.eventDetect = False #Cet attribut permet de dire si un évènement à eu lieu. à remettre à False si jamais.
         self.motionDetect = False #Cet attribut permet de dire si un évènement à mouvement à eu lieu. à remettre à False si jamais.
         self.countCells = tkinter.IntVar() #Cet attribut représente le nombre de cellules en vie.
+        self.countStage = tkinter.IntVar() #Cet attribut représente le nombre de l'étape en cours.
 
 
 
@@ -239,9 +240,19 @@ class GameOfLifeGraphic:
         """
         Cette méthode ajoute le conteur de cellules en vie.
         """
-        textFR = "cellules en vie : "
-        textEN = "cells alive : "
-        label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, bg="black", fg="white")
+        textFR = ["Nombre de l'étape : ", "cellules en vie : "]
+        textEN = ["Number of the stage : ", "cells alive : "]
+        label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
+        self._columnIndex += 3
+
+        label = tkinter.Label(self._menuFrame, textvariable=self.countStage, font=self.__font, bg="black", fg="white")
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
+
+        self._columnIndex = 0
+        self._rowIndex += 1
+
+        label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
