@@ -60,7 +60,7 @@ class GameOfLifeGraphic:
         Cette méthode initialise le canvas de l'interface
         """
         self.__canvas.config(width=self.__width, height=self.__height, bg="white", highlightthickness=0)
-        self.__canvas.grid(row=0, column=1)
+        self.__canvas.grid(row=0, column=0)
 
         self.__initRender()
 
@@ -83,7 +83,7 @@ class GameOfLifeGraphic:
         Cette méthode initialise le menu de l'interface.
         """
         self._menuFrame.config(bg="black")
-        self._menuFrame.grid(row=0, column=2)
+        self._menuFrame.grid(row=0, column=1)
 
         label = tkinter.Label(self._menuFrame, text="Game of Life", font="Courier 22 bold", fg="white", bg="black")
         label.grid(row=self._rowIndex, column=0, columnspan=100, padx=10, pady=10)
@@ -95,8 +95,8 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise le range du TPS.
         """
-        textFR = "Actions par seconde"
-        textEN = "Ticks per second"
+        textFR = "Nombre d'actions par seconde"
+        textEN = "Number of ticks per second"
         label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, fg="white", bg="black")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
@@ -120,8 +120,8 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise les bouttons de random.
         """
-        textFR = "Random (en %)"
-        textEN = "Random (in %)"
+        textFR = "Génération aléatoire (en %)"
+        textEN = "Random generation (in %)"
         label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, fg="white", bg="black")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
@@ -206,7 +206,7 @@ class GameOfLifeGraphic:
         param : row - La ligne où ça commence.
         param : column - La colonne où ça commence.
         """
-        self.__saveButton.config(text="Save", font=self.__font)
+        self.__saveButton.config(text="Export", font=self.__font)
         self.__saveButton.grid(row=self._rowIndex, column=self._columnIndex, padx=10, pady=10)
         self._columnIndex += 1
 
@@ -252,7 +252,7 @@ class GameOfLifeGraphic:
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR[1], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
@@ -304,11 +304,10 @@ Good game !"""
         Cette méthode initialise l'interface.
         """
         self._initRoot()
-        self._text()
         self._initCanvas()
         self._initMenu()
-        self._initTimeRange()
         self._initRandom()
+        self._initTimeRange()
         self._initStartButton()
         self._initSaveButton()
         self._initEvent()

@@ -44,13 +44,23 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         """
         Cette méthode initialise les boutons de couleur
         """
+        textFR = "Choix des couleurs"
+        textEN = "Choice of colors"
+
+        label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, bg="black", fg="white")
         redButton = tkinter.Checkbutton(self._menuFrame, bg="red", width=3, command=lambda : self.__updateColor("red"))
         greenButton = tkinter.Checkbutton(self._menuFrame, bg="green", width=3, command=lambda : self.__updateColor("green"))
         blueButton = tkinter.Checkbutton(self._menuFrame, bg="blue", width=3, command=lambda : self.__updateColor("blue"))
+        
+        label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=1000, padx=10, pady=10)
+        self._rowIndex += 1
+
         redButton.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 1
+        
         greenButton.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 1
+        
         blueButton.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex = 0
         self._rowIndex += 1
@@ -93,31 +103,31 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[1], font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR[1], font=self.__font, bg="black", fg="red")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsRed, font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsRed, font=self.__font, bg="black", fg="red")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[2], font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR[2], font=self.__font, bg="black", fg="green")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsGreen, font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsGreen, font=self.__font, bg="black", fg="green")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[3], font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR[3], font=self.__font, bg="black", fg="blue")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsBlue, font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsBlue, font=self.__font, bg="black", fg="blue")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
@@ -178,12 +188,11 @@ Good game !"""
         Cette méthode initialise l'interface.
         """
         self._initRoot()
-        self._text()
         self._initCanvas()
         self._initMenu()
-        self._initTimeRange()
         self._initColor()
         self._initRandom()
+        self._initTimeRange()
         self._initStartButton()
         self._initSaveButton()
         self._initEvent()
