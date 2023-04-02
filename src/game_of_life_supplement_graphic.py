@@ -91,7 +91,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         """
         Cette méthode ajoute le conteur de cellules en vie.
         """
-        textFR = ["Nombre de l'étape : ", "cellules rouges en vie : ", "cellules vertes en vie : ", "cellules bleues en vie : "]
+        textFR = ["Numéro de l'étape : ", "cellules rouges en vie : ", "cellules vertes en vie : ", "cellules bleues en vie : "]
         textEN = ["Number of the stage : ", "cells red alive : ", "cells green alive : ", "cells blue alive : "]
         label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
