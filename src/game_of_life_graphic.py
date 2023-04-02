@@ -95,8 +95,8 @@ class GameOfLifeGraphic:
         """
         Cette méthode initialise le range du TPS.
         """
-        textFR = "Nombre d'actions par seconde"
-        textEN = "Number of ticks per second"
+        textFR = "Temps entre les étapes"
+        textEN = "Time between steps"
         label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, fg="white", bg="black")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=100, padx=10, pady=10)
         self._rowIndex += 1
@@ -240,7 +240,7 @@ class GameOfLifeGraphic:
         """
         Cette méthode ajoute le conteur de cellules en vie.
         """
-        textFR = ["Nombre de l'étape : ", "cellules en vie : "]
+        textFR = ["Numéro de l'étape : ", "cellules en vie : "]
         textEN = ["Number of the stage : ", "cells alive : "]
         label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
