@@ -47,7 +47,7 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         textFR = "Choix des couleurs"
         textEN = "Choice of colors"
 
-        label = tkinter.Label(self._menuFrame, text=textFR, font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR, font=self._font, bg="black", fg="white")
         redButton = tkinter.Checkbutton(self._menuFrame, bg="red", width=3, command=lambda : self.__updateColor("red"))
         greenButton = tkinter.Checkbutton(self._menuFrame, bg="green", width=3, command=lambda : self.__updateColor("green"))
         blueButton = tkinter.Checkbutton(self._menuFrame, bg="blue", width=3, command=lambda : self.__updateColor("blue"))
@@ -93,93 +93,45 @@ class GameOfLifeGraphic(game_of_life_graphic.GameOfLifeGraphic):
         """
         textFR = ["Numéro de l'étape : ", "cellules rouges en vie : ", "cellules vertes en vie : ", "cellules bleues en vie : "]
         textEN = ["Number of the stage : ", "cells red alive : ", "cells green alive : ", "cells blue alive : "]
-        label = tkinter.Label(self._menuFrame, text=textFR[0], font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, text=textFR[0], font=self._font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countStage, font=self.__font, bg="black", fg="white")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countStage, font=self._font, bg="black", fg="white")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[1], font=self.__font, bg="black", fg="red")
+        label = tkinter.Label(self._menuFrame, text=textFR[1], font=self._font, bg="black", fg="red")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsRed, font=self.__font, bg="black", fg="red")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsRed, font=self._font, bg="black", fg="red")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[2], font=self.__font, bg="black", fg="green")
+        label = tkinter.Label(self._menuFrame, text=textFR[2], font=self._font, bg="black", fg="green")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsGreen, font=self.__font, bg="black", fg="green")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsGreen, font=self._font, bg="black", fg="green")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
 
-        label = tkinter.Label(self._menuFrame, text=textFR[3], font=self.__font, bg="black", fg="blue")
+        label = tkinter.Label(self._menuFrame, text=textFR[3], font=self._font, bg="black", fg="blue")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=3, padx=10, pady=10)
         self._columnIndex += 3
 
-        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsBlue, font=self.__font, bg="black", fg="blue")
+        label = tkinter.Label(self._menuFrame, textvariable=self.countCellsBlue, font=self._font, bg="black", fg="blue")
         label.grid(row=self._rowIndex, column=self._columnIndex, columnspan=2, padx=10, pady=10)
 
         self._columnIndex = 0
         self._rowIndex += 1
-    
-
-
-    def _text(self) -> None:
-        """
-        Cette méthode ajoute le texte explicatif.
-        """
-        textFR = """Bonjour et bienvenue dans le jeu de la vie.
-Les règles sont simples.
-Sur une grille de case,
-des cellules vont évoluer avec ces régles:
--Une cellule seule meurt.
--Une cellule avec plus de 3 voisines meurt.
--Une case avec exactement 3 voisines naît.
-(La couleur dominante l'emporte,
-aléatoire dans le cas de l'égalité).
-Les cellules vieillissent,
-au plus claire au plus foncée.
-Pour ajouter une cellule, choissisez une ou plusieurs couleurs.
-et de faire un clique droit sur la grille
-(Pour retirer, continuez de cliquer
-jusqu'à ce que la cellule soit effacée).
-Vous pouvez régler le temps avec
-la barre Actions par seconde.
-Bon jeu !"""
-
-        textEN = """Hello and welcome to the game of life.
-The rules are simple.
-On a grid of cells,
-cells will evolve with these rules:
--A cell alone dies.
--A cell with more than 3 neighbors dies.
--A cell with exactly 3 neighbors births.
-(The dominant color win,
-random if equality).
-The cells grow up,
-from lightest to darknest.
-To add a cell, chose one or many colors
-and right click in the grid
-(to remove continue to right click
-until the cell is erased).
-You can adjust the time with
-the Ticks per seconds scrollbar.
-Good game !"""
-
-        label = tkinter.Label(text=textFR, font="Times_New_Roman 12", bg="black", fg="white"
-        )
-        label.grid(row=0, column=0)
 
 
 
